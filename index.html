@@ -237,6 +237,9 @@
   // Wait for user click to start
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
+    // Sound will be enabled after countdown finishes
+
+    // Start Countdown
     countdown.classList.remove('hidden');
     
     // Start countdown: 3, 2, 1 (không bật âm thanh ngay)
@@ -251,34 +254,28 @@
         countdownNumber.textContent = countdownSequence[currentIndex];
       } else {
         clearInterval(interval);
+        countdown.classList.add('hidden');
         
-        // Đợi 1 giây sau số 1 mới ẩn countdown
+        // Show Background and Year
+        html.classList.add('show-background');
+        yearDisplay.style.opacity = '1';
+
+        // Start Sound (Delayed until countdown finishes)
+        var soundBtn = document.querySelector('.sound-btn');
+        if (soundBtn) {
+          var useEl = soundBtn.querySelector('use');
+          if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
+            soundBtn.click();
+          }
+        }
+
+        // Animate 2025 -> 2026 after a delay
         setTimeout(function() {
-          countdown.classList.add('hidden');
-          
-          // Show Background and Year
-          html.classList.add('show-background');
-          yearDisplay.style.opacity = '1';
-          
-          // Bật âm thanh SAU 1 giây nữa (tổng 2 giây sau số 1)
-          setTimeout(function() {
-            var soundBtn = document.querySelector('.sound-btn');
-            if (soundBtn) {
-              var useEl = soundBtn.querySelector('use');
-              if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
-                soundBtn.click();
-              }
-            }
-          }, 1000);
+          yearNumber.classList.add('animate');
+        }, 1500);
 
-          // Animate digit 6 flying in after 1.5 seconds
-          setTimeout(function() {
-            yearNumber.classList.add('animate-digit');
-          }, 1500);
-
-          // Start Wishes
-          setTimeout(scheduleWish, 2500);
-        }, 1000);
+        // Start Wishes
+        setTimeout(scheduleWish, 2000);
       }
     }, 1000);
   });
