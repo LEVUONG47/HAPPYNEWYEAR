@@ -241,8 +241,8 @@
     startScreen.classList.add('hidden');
     countdown.classList.remove('hidden');
     
-    // Start countdown: 3, 2, 1, Bắt đầu
-    var countdownSequence = ['3', '2', '1', 'Bắt đầu'];
+    // Start countdown: 3, 2, 1 (bỏ "Bắt đầu" cuối)
+    var countdownSequence = ['3', '2', '1'];
     var currentIndex = 0;
     
     countdownNumber.textContent = countdownSequence[currentIndex];
@@ -259,15 +259,7 @@
         html.classList.add('show-background');
         yearDisplay.style.opacity = '1';
         
-        // Show fireworks after countdown
-        setTimeout(function() {
-          var stageContainer = document.querySelector('.stage-container');
-          if (stageContainer) {
-            stageContainer.classList.add('show-fireworks');
-          }
-        }, 500);
-        
-        // Enable sound AFTER showing fireworks
+        // Enable sound immediately after countdown
         setTimeout(function() {
           var soundBtn = document.querySelector('.sound-btn');
           if (soundBtn) {
@@ -276,15 +268,15 @@
               soundBtn.click();
             }
           }
-        }, 1000);
+        }, 500);
 
-        // Animate digit 6 flying in after 1.5 seconds
+        // Animate digit 6 flying in after 1 second
         setTimeout(function() {
           yearNumber.classList.add('animate-digit');
-        }, 1500);
+        }, 1000);
 
         // Start Wishes
-        setTimeout(scheduleWish, 2500);
+        setTimeout(scheduleWish, 2000);
       }
     }, 1000);
   });
