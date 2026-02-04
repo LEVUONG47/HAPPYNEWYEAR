@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#000000">
   <link rel="shortcut icon" type="image/png" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Russo+One&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Russo+One&family=Great+Vibes&family=Montserrat:wght@100;300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="./style.css">
   <style>
@@ -19,7 +19,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.9);
+      /* Gradient background cho màn hình bắt đầu */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -28,12 +29,15 @@
       cursor: pointer;
     }
     .start-screen h1 {
-      font-family: 'Great Vibes', cursive;
-      font-size: clamp(2rem, 8vw, 4rem);
-      color: #ffd700;
-      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 300;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      color: #fff;
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
       margin-bottom: 20px;
       animation: pulse 2s ease-in-out infinite;
+      letter-spacing: 8px;
+      text-transform: uppercase;
     }
     .start-screen p {
       font-family: 'Russo One', sans-serif;
@@ -120,7 +124,9 @@
 </head>
 <body>
 <!-- Countdown -->
-<div id="countdown" class="countdown-container hidden"></div>
+<div id="countdown" class="countdown-container hidden">
+  <div class="countdown-number"></div>
+</div>
 
 <!-- Start Screen - Click to enable sound -->
 <div class="start-screen" id="startScreen">
@@ -144,13 +150,7 @@
 
 <!-- Year -->
 <div class="year-display" style="opacity: 0; transition: opacity 2s;">
-  <div class="year-number">
-    <span>202</span>
-    <span class="digit-wrapper">
-      <span class="digit-old">5</span>
-      <span class="digit-new">6</span>
-    </span>
-  </div>
+  <div class="year-number">2026</div>
   <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
 </div>
 
@@ -228,6 +228,7 @@
   // Start screen - enable sound on click
   var startScreen = document.getElementById('startScreen');
   var countdown = document.getElementById('countdown');
+  var countdownNumber = document.querySelector('.countdown-number');
   var yearDisplay = document.querySelector('.year-display');
   var yearNumber = document.querySelector('.year-number');
   var html = document.documentElement;
@@ -246,12 +247,12 @@
     // Start Countdown
     countdown.classList.remove('hidden');
     var count = 3;
-    countdown.textContent = count;
+    countdownNumber.textContent = count;
 
     var interval = setInterval(function() {
       count--;
       if (count > 0) {
-        countdown.textContent = count;
+        countdownNumber.textContent = count;
       } else {
         clearInterval(interval);
         countdown.classList.add('hidden');
@@ -259,11 +260,6 @@
         // Show Background and Year
         html.classList.add('show-background');
         yearDisplay.style.opacity = '1';
-
-        // Animate 2025 -> 2026 after a delay
-        setTimeout(function() {
-          yearNumber.classList.add('animate');
-        }, 1500);
 
         // Start Wishes
         setTimeout(scheduleWish, 2000);
