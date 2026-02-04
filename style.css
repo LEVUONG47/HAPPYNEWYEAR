@@ -14,7 +14,8 @@
 }
 
 html.show-background {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=2069&auto=format&fit=crop') no-repeat center center fixed;
+  /* New Background Image - Night Sky with Fireworks/Lights */
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1532074205216-d0e1f4b87368?q=80&w=2041&auto=format&fit=crop') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -28,7 +29,7 @@ html.show-background {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  background: #000;
+  background: #000; /* Ensure solid black background */
   color: #fff;
   font-family: 'Russo One', sans-serif;
   font-size: 15vw;
@@ -531,7 +532,7 @@ html.show-background {
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(4rem, 15vw, 8rem); /* Increased size */
-  color: #fff;
+  color: #ffd700; /* Unified Gold Color for 2025 and 2026 */
   text-shadow: 0 0 15px #ff3366, 0 0 30px #ff3366;
   white-space: nowrap;
   overflow: visible !important; /* Allow flying from outside */
