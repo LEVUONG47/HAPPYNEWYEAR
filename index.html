@@ -284,21 +284,21 @@
           html.classList.add('show-background');
           yearDisplay.style.opacity = '1';
           
-          // Enable click trên stage - BÂY GIỜ MỚI cho phép bắn pháo hoa
+          // Enable click trên stage - cho phép user click bắn pháo hoa
           if (stageContainer) {
             stageContainer.style.pointerEvents = 'auto';
           }
           
-          // Resume pháo hoa và bật âm thanh sau 1 giây
+          // Unpause pháo hoa (tự động bắn) và bật âm thanh sau 1 giây
           setTimeout(function() {
-            // Resume pháo hoa - click nút pause để unpause
+            // Unpause pháo hoa - tự động bắn
             var pauseBtn = document.querySelector('.pause-btn');
             if (pauseBtn) {
               var svg = pauseBtn.querySelector('use');
-              // Nếu đang pause (icon play), thì click để resume
+              // Nếu đang pause (icon play), thì click để unpause
               if (svg && svg.getAttribute('href') === '#icon-play') {
                 pauseBtn.click();
-                console.log('Resumed fireworks after countdown');
+                console.log('Unpaused - fireworks auto-launch');
               }
             }
             
