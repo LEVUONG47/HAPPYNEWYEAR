@@ -14,7 +14,7 @@
 }
 
 html.show-background {
-  /* New Background Image - Night Sky with Fireworks/Lights */
+  /* Background hình ảnh cho màn hình pháo hoa - thay URL bằng link ảnh của bạn */
   background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1532074205216-d0e1f4b87368?q=80&w=2041&auto=format&fit=crop') no-repeat center center fixed;
   background-size: cover;
 }
@@ -29,8 +29,9 @@ html.show-background {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  /* Gradient background cho countdown - có thể thay đổi */
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #7e22ce 100%);
+  /* Background hình ảnh cho countdown - thay URL bằng link ảnh của bạn */
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1482575832494-771f74bf6857?q=80&w=2070') no-repeat center center;
+  background-size: cover;
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.5s;
@@ -43,24 +44,15 @@ html.show-background {
 }
 
 .countdown-number {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 100;
-  font-size: 25vw;
-  /* Glossy gradient effect */
-  background: linear-gradient(to bottom, 
-    #ffffff 0%,
-    #ffd700 20%,
-    #ffed4e 40%,
-    #ffd700 60%,
-    #ff6b6b 80%,
-    #ff3366 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 0 80px rgba(255, 215, 0, 0.8);
-  filter: drop-shadow(0 10px 30px rgba(255, 215, 0, 0.6)) 
-          drop-shadow(0 0 50px rgba(255, 107, 107, 0.4));
+  font-family: 'Great Vibes', cursive;
+  font-weight: 700;
+  font-size: 30vw;
+  color: #ffd700;
+  text-shadow: 
+    0 0 40px rgba(255, 215, 0, 1),
+    0 0 80px rgba(255, 215, 0, 0.8),
+    0 0 120px rgba(255, 215, 0, 0.6),
+    0 5px 30px rgba(0, 0, 0, 0.8);
   animation: countdownPulse 1s ease-in-out;
 }
 
@@ -78,24 +70,42 @@ html.show-background {
   }
 }
 
-/* Year Display - Unified Color */
+/* Year Display - With Flying Digit Animation */
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(4rem, 15vw, 8rem);
-  /* Unified gold color for entire year */
-  background: linear-gradient(to bottom, 
-    #ffd700 0%,
-    #ffed4e 30%,
-    #ffd700 50%,
-    #ffb347 70%,
-    #ff6b6b 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+  color: #ffd700;
+  text-shadow: 
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 215, 0, 0.6),
+    0 5px 20px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
   animation: yearGlow 3s ease-in-out infinite;
+  display: inline-block;
+  position: relative;
+  overflow: visible;
+}
+
+.year-number .digit-5 {
+  display: inline-block;
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.year-number .digit-6 {
+  display: inline-block;
+  position: absolute;
+  transform: translateX(150vw);
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.year-number.animate-digit .digit-5 {
+  transform: translateX(-150vw);
+  opacity: 0;
+}
+
+.year-number.animate-digit .digit-6 {
+  transform: translateX(0);
+  position: relative;
 }
 
 @keyframes yearGlow {
