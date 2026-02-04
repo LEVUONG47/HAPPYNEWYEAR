@@ -9,15 +9,15 @@
   }
   
   html {
-  /* Background hình con ngựa luôn - không đen nữa */
-  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* Background hình con ngựa - test với link khác nếu không load */
+  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
   transition: background 1s ease;
 }
 
 html.show-background {
   /* Giữ nguyên background hình con ngựa */
-  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -70,16 +70,24 @@ html.show-background {
   }
 }
 
-/* Year Display - Fixed: số 5 biến mất, số 6 thay thế */
+/* Year Display - Số 6 đẩy số 5 ra */
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(2.5rem, 8vw, 4.5rem);
-  color: #ffd700;
-  text-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.6);
-  filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
-  animation: yearGlow 3s ease-in-out infinite;
+  /* Gradient màu đẹp cho 2026 */
+  background: linear-gradient(45deg, #ffd700, #ff6b6b, #ffd700, #ff6b6b);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 3s ease infinite, yearGlow 3s ease-in-out infinite;
+  display: inline-block;
+  position: relative;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .year-number .year-prefix {
@@ -89,32 +97,31 @@ html.show-background {
 .year-number .digit-5,
 .year-number .digit-6 {
   display: inline-block;
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transition: all 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-/* Ban đầu: số 5 hiện, số 6 ẩn ở ngoài màn hình */
+/* Ban đầu: số 5 hiện, số 6 ẩn ở ngoài bên phải */
 .year-number .digit-5 {
   opacity: 1;
-  position: relative;
+  transform: translateX(0);
 }
 
 .year-number .digit-6 {
   position: absolute;
+  left: 0;
   transform: translateX(300vw);
   opacity: 0;
 }
 
-/* Khi animate: số 5 bay đi và ẩn, số 6 bay vào */
+/* Khi animate: số 6 bay vào đẩy số 5 ra */
 .year-number.animate-digit .digit-5 {
-  transform: translateX(-300vw);
+  transform: translateX(-200%); /* Số 5 bị đẩy sang trái */
   opacity: 0;
-  width: 0; /* Thu nhỏ width để số 6 chiếm chỗ */
-  overflow: hidden;
 }
 
 .year-number.animate-digit .digit-6 {
   position: relative;
-  transform: translateX(0);
+  transform: translateX(0); /* Số 6 bay vào vị trí */
   opacity: 1;
 }
 
