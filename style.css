@@ -450,7 +450,8 @@ html.show-background {
             transition-duration: 0.4s;
   }
 
-.start-screen .start-btn-text {
+/* Old Start Button Styles - Overwritten below */
+.start-screen .start-btn-text-old-delete-me {
   font-family: 'Montserrat', sans-serif;
   font-weight: 300;
   font-size: clamp(2rem, 5vw, 4rem);
@@ -466,7 +467,7 @@ html.show-background {
   animation: pulse 2s infinite;
 }
 
-.start-screen .start-btn-text:hover {
+.start-screen .start-btn-text:hover-old-delete-me {
   background: #fff;
   color: #000;
   box-shadow: 0 0 20px #fff;
@@ -571,15 +572,18 @@ html.show-background {
   50% { text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 215, 0, 1), 0 0 35px rgba(255, 107, 107, 0.8); }
 }
 
-/* Countdown Overrides */
+/* Countdown Overrides - Glossy Gold */
 .countdown-container {
   font-family: 'Montserrat', sans-serif !important;
   font-weight: 100 !important;
-  color: #ffd700 !important;
-  text-shadow: 
-    0 0 10px rgba(255, 215, 0, 0.8),
-    0 0 20px rgba(255, 215, 0, 0.6),
-    0 0 40px rgba(255, 255, 255, 0.4) !important;
+  /* Glossy Gold Gradient Text Effect */
+  background: linear-gradient(to bottom, #cfc09f 22%, #634f2c 24%, #cfc09f 26%, #cfc09f 27%, #ffecb3 40%, #3a2c0f 78%); 
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent !important;
+  text-shadow: none !important; /* Remove shadow to let gradient shine, or add a subtle drop shadow separately */
+  filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
 }
 
 /* Year Animation Logic Update */
@@ -590,9 +594,39 @@ html.show-background {
 .digit-new {
   transform: translateX(100vw) !important; /* Fly from right screen */
   color: #ffd700; /* Gold pop */
-  text-shadow: 0 0 20px #fff, 0 0 40px #ff3366;
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 100, 100, 0.5); /* Enhanced pop */
+  font-weight: 900;
 }
 .year-number.animate .digit-new {
   transform: translateX(0) !important;
-  transition: transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition: transform 2.5s cubic-bezier(0.25, 1, 0.5, 1); /* Smoother fly-in */
+}
+
+/* Start Button Refinement */
+.start-screen .start-btn-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 100; /* Thin font for elegance */
+  font-size: clamp(2rem, 5vw, 4rem);
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 8px;
+  border: 1px solid rgba(255,255,255,0.5);
+  padding: 20px 60px;
+  border-radius: 100px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 30px rgba(255,215,0,0.2);
+  transition: all 0.4s ease;
+  animation: pulse 3s infinite;
+  cursor: pointer;
+}
+.start-screen .start-btn-text:hover {
+  background: rgba(255,255,255,0.1);
+  box-shadow: 0 0 50px rgba(255,215,0,0.6);
+  border-color: #ffd700;
+  color: #ffd700;
+  letter-spacing: 12px;
 }
