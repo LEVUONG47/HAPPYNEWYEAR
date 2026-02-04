@@ -9,13 +9,15 @@
   }
   
   html {
-  background-color: #000;
+  /* Background hình con ngựa luôn - không đen nữa */
+  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  background-size: cover;
   transition: background 1s ease;
 }
 
 html.show-background {
-  /* New Background Image - Horse Image from GitHub */
-  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* Giữ nguyên background hình con ngựa */
+  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -29,10 +31,7 @@ html.show-background {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  background: #000; /* Ensure solid black background */
-  color: #fff;
-  font-family: 'Russo One', sans-serif;
-  font-size: 15vw;
+  background: rgba(0, 0, 0, 0.95); /* Đen mờ che hình con ngựa khi countdown */
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.5s;
@@ -71,36 +70,51 @@ html.show-background {
   }
 }
 
-/* Year Display - Completely remove spacing */
+/* Year Display - Smaller and proper digit replacement */
 .year-number {
   font-family: 'Russo One', sans-serif;
-  font-size: clamp(2.5rem, 10vw, 5rem); /* Reduced size - nhỏ phù hợp người nhìn */
-  color: #ffd700; /* Unified Gold Color for 2025 and 2026 */
-  text-shadow: 0 0 15px #ff3366, 0 0 30px #ff3366;
-  white-space: nowrap;
-  overflow: visible !important; /* Allow flying from outside */
-}
-
-.year-number > span {
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-}
-
-/* Year Animation Logic Update */
-.digit-wrapper {
-  overflow: visible !important;
-  width: 0.55em; /* Reduced width to make it tighter (khít hơn) */
-  margin-left: -0.05em; /* Negative margin to pull it closer */
-}
-.digit-new {
-  transform: translateX(100vw) !important; /* Fly from right screen */
-  color: #ffd700; /* Gold pop */
+  font-size: clamp(2.5rem, 8vw, 4.5rem); /* Nhỏ hơn để phù hợp */
+  color: #ffd700;
   text-shadow: 
-    0 0 10px rgba(255, 255, 255, 0.8),
     0 0 20px rgba(255, 215, 0, 0.8),
-    0 0 40px rgba(255, 100, 100, 0.5); /* Enhanced pop */
-  font-weight: 900;
+    0 0 40px rgba(255, 215, 0, 0.6);
+  filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
+  animation: yearGlow 3s ease-in-out infinite;
+  display: inline-flex;
+  position: relative;
+}
+
+.year-number .year-prefix,
+.year-number .digit-5,
+.year-number .digit-6 {
+  display: inline-block;
+}
+
+.year-number .digit-5 {
+  opacity: 1;
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.year-number .digit-6 {
+  position: absolute;
+  left: 100%;
+  transform: translateX(300vw);
+  opacity: 0;
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Khi animate: số 5 biến mất hoàn toàn, số 6 xuất hiện */
+.year-number.animate-digit .digit-5 {
+  transform: translateX(-300vw);
+  opacity: 0;
+  display: none; /* Ẩn hoàn toàn số 5 */
+}
+
+.year-number.animate-digit .digit-6 {
+  position: relative;
+  left: 0;
+  transform: translateX(0);
+  opacity: 1;
 }
 
 @keyframes yearGlow {
