@@ -15,7 +15,7 @@
 
 html.show-background {
   /* Background hình ảnh con ngựa cho màn hình pháo hoa */
-  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://github.com/LEVUONG47/HAPPYNEWYEAR/blob/main/image.png?raw=true') no-repeat center center fixed;
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -69,7 +69,7 @@ html.show-background {
   }
 }
 
-/* Year Display - With Flying Digit Animation */
+/* Year Display - With Flying Digit Animation - Fixed spacing */
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(4rem, 15vw, 8rem);
@@ -80,31 +80,35 @@ html.show-background {
     0 5px 20px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
   animation: yearGlow 3s ease-in-out infinite;
+  white-space: nowrap;
+}
+
+.year-number > span {
   display: inline-block;
-  position: relative;
-  overflow: visible;
 }
 
 .year-number .digit-5 {
-  display: inline-block;
   transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  opacity: 1;
 }
 
 .year-number .digit-6 {
-  display: inline-block;
   position: absolute;
-  transform: translateX(150vw);
+  left: 0;
+  transform: translateX(200vw);
   transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  opacity: 0;
 }
 
 .year-number.animate-digit .digit-5 {
-  transform: translateX(-150vw);
+  transform: translateX(-200vw);
   opacity: 0;
 }
 
 .year-number.animate-digit .digit-6 {
-  transform: translateX(0);
   position: relative;
+  transform: translateX(0);
+  opacity: 1;
 }
 
 @keyframes yearGlow {
@@ -169,6 +173,14 @@ html.show-background {
     box-sizing: initial;
     border: 1px solid #222;
     margin: -1px;
+    /* Ẩn pháo hoa ban đầu */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s, visibility 1s;
+  }
+  .stage-container.show-fireworks {
+    opacity: 1;
+    visibility: visible;
   }
   @media (max-width: 840px) {
     .stage-container {
