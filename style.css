@@ -9,8 +9,82 @@
   }
   
   html {
-    background-color: #000;
-  }
+  background-color: #000;
+  transition: background 1s ease;
+}
+
+html.show-background {
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=2069&auto=format&fit=crop') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.countdown-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  background: #000;
+  color: #fff;
+  font-family: 'Russo One', sans-serif;
+  font-size: 15vw;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.countdown-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Year Animation */
+.year-number {
+  display: inline-flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.digit-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 0.6em; /* Approximate width of a digit */
+  text-align: center;
+  overflow: hidden;
+}
+
+.digit-wrapper span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  transition: transform 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.digit-old {
+  transform: translateX(0);
+}
+
+.digit-new {
+  transform: translateX(100%);
+  color: #ff3366; /* Highlight the new year */
+}
+
+.year-number.animate .digit-old {
+  transform: translateX(-150%);
+  opacity: 0;
+}
+
+.year-number.animate .digit-new {
+  transform: translateX(0);
+}
   
   body {
     overflow: hidden;
