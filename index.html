@@ -252,7 +252,7 @@
       } else {
         clearInterval(interval);
         
-        // Đợi 0.5 giây sau số 1 mới ẩn countdown
+        // Đợi 1 giây sau số 1 mới ẩn countdown
         setTimeout(function() {
           countdown.classList.add('hidden');
           
@@ -260,7 +260,7 @@
           html.classList.add('show-background');
           yearDisplay.style.opacity = '1';
           
-          // Bật âm thanh SAU KHI countdown hoàn toàn xong
+          // Bật âm thanh SAU 1 giây nữa (tổng 2 giây sau số 1)
           setTimeout(function() {
             var soundBtn = document.querySelector('.sound-btn');
             if (soundBtn) {
@@ -269,16 +269,16 @@
                 soundBtn.click();
               }
             }
-          }, 300);
-
-          // Animate digit 6 flying in after 1 second
-          setTimeout(function() {
-            yearNumber.classList.add('animate-digit');
           }, 1000);
 
+          // Animate digit 6 flying in after 1.5 seconds
+          setTimeout(function() {
+            yearNumber.classList.add('animate-digit');
+          }, 1500);
+
           // Start Wishes
-          setTimeout(scheduleWish, 2000);
-        }, 500);
+          setTimeout(scheduleWish, 2500);
+        }, 1000);
       }
     }, 1000);
   });
