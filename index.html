@@ -259,7 +259,15 @@
         html.classList.add('show-background');
         yearDisplay.style.opacity = '1';
         
-        // Enable sound AFTER countdown
+        // Show fireworks after countdown
+        setTimeout(function() {
+          var stageContainer = document.querySelector('.stage-container');
+          if (stageContainer) {
+            stageContainer.classList.add('show-fireworks');
+          }
+        }, 500);
+        
+        // Enable sound AFTER showing fireworks
         setTimeout(function() {
           var soundBtn = document.querySelector('.sound-btn');
           if (soundBtn) {
@@ -268,15 +276,15 @@
               soundBtn.click();
             }
           }
-        }, 500);
-
-        // Animate digit 6 flying in after 1 second
-        setTimeout(function() {
-          yearNumber.classList.add('animate-digit');
         }, 1000);
 
+        // Animate digit 6 flying in after 1.5 seconds
+        setTimeout(function() {
+          yearNumber.classList.add('animate-digit');
+        }, 1500);
+
         // Start Wishes
-        setTimeout(scheduleWish, 2000);
+        setTimeout(scheduleWish, 2500);
       }
     }, 1000);
   });
