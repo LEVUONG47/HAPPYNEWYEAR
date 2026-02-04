@@ -228,6 +228,22 @@
 
 <script>
 (function() {
+  // PAUSE pháo hoa ngay khi page load
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      // Tìm và click nút pause để dừng pháo hoa
+      var pauseBtn = document.querySelector('.pause-btn');
+      if (pauseBtn) {
+        var svg = pauseBtn.querySelector('use');
+        // Nếu đang play (icon pause), thì click để pause
+        if (svg && svg.getAttribute('href') === '#icon-pause') {
+          pauseBtn.click();
+          console.log('Paused fireworks on load');
+        }
+      }
+    }, 100);
+  });
+  
   // Start screen - click to begin
   var startScreen = document.getElementById('startScreen');
   var countdown = document.getElementById('countdown');
@@ -240,12 +256,6 @@
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
     countdown.classList.remove('hidden');
-    
-    // Tạm dừng pháo hoa tự động (nếu có)
-    var pauseBtn = document.querySelector('.pause-btn');
-    if (pauseBtn && !store.state.paused) {
-      pauseBtn.click(); // Pause pháo hoa
-    }
     
     // Disable click trên stage để không bắn pháo hoa khi countdown
     var stageContainer = document.querySelector('.stage-container');
@@ -281,9 +291,15 @@
           
           // Resume pháo hoa và bật âm thanh sau 1 giây
           setTimeout(function() {
-            // Resume pháo hoa
-            if (pauseBtn && store.state.paused) {
-              pauseBtn.click(); // Resume
+            // Resume pháo hoa - click nút pause để unpause
+            var pauseBtn = document.querySelector('.pause-btn');
+            if (pauseBtn) {
+              var svg = pauseBtn.querySelector('use');
+              // Nếu đang pause (icon play), thì click để resume
+              if (svg && svg.getAttribute('href') === '#icon-play') {
+                pauseBtn.click();
+                console.log('Resumed fireworks after countdown');
+              }
             }
             
             // Bật âm thanh
@@ -292,6 +308,7 @@
               var useEl = soundBtn.querySelector('use');
               if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
                 soundBtn.click();
+                console.log('Enabled sound');
               }
             }
           }, 1000);
