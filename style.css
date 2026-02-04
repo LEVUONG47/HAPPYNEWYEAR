@@ -69,7 +69,7 @@ html.show-background {
   }
 }
 
-/* Year Display - With Flying Digit Animation - Fixed spacing */
+/* Year Display - Fixed digit 6 spacing */
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(4rem, 15vw, 8rem);
@@ -80,33 +80,34 @@ html.show-background {
     0 5px 20px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
   animation: yearGlow 3s ease-in-out infinite;
-  white-space: nowrap;
-}
-
-.year-number > span {
+  position: relative;
   display: inline-block;
 }
 
-.year-number .digit-5 {
+.year-number .digit-5,
+.year-number .digit-6 {
+  display: inline-block;
   transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.year-number .digit-5 {
   opacity: 1;
 }
 
 .year-number .digit-6 {
   position: absolute;
   left: 0;
-  transform: translateX(200vw);
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transform: translateX(300vw);
   opacity: 0;
 }
 
 .year-number.animate-digit .digit-5 {
-  transform: translateX(-200vw);
+  transform: translateX(-300vw);
   opacity: 0;
 }
 
 .year-number.animate-digit .digit-6 {
-  position: relative;
+  position: static;
   transform: translateX(0);
   opacity: 1;
 }
@@ -173,14 +174,6 @@ html.show-background {
     box-sizing: initial;
     border: 1px solid #222;
     margin: -1px;
-    /* Ẩn pháo hoa ban đầu */
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 1s, visibility 1s;
-  }
-  .stage-container.show-fireworks {
-    opacity: 1;
-    visibility: visible;
   }
   @media (max-width: 840px) {
     .stage-container {
