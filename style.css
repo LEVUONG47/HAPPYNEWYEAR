@@ -14,8 +14,8 @@
 }
 
 html.show-background {
-  /* Background hình ảnh con ngựa - không có overlay để thấy rõ */
-  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* New Background Image - Horse Image from GitHub */
+  background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -29,8 +29,10 @@ html.show-background {
   justify-content: center;
   align-items: center;
   z-index: 10000;
-  /* Background màu đen cho countdown */
-  background: #000;
+  background: #000; /* Ensure solid black background */
+  color: #fff;
+  font-family: 'Russo One', sans-serif;
+  font-size: 15vw;
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.5s;
@@ -72,17 +74,11 @@ html.show-background {
 /* Year Display - Completely remove spacing */
 .year-number {
   font-family: 'Russo One', sans-serif;
-  font-size: clamp(4rem, 15vw, 8rem);
-  color: #ffd700;
-  text-shadow: 
-    0 0 20px rgba(255, 215, 0, 0.8),
-    0 0 40px rgba(255, 215, 0, 0.6),
-    0 5px 20px rgba(0, 0, 0, 0.5);
-  filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
-  animation: yearGlow 3s ease-in-out infinite;
-  display: inline-flex;
-  gap: 0;
-  letter-spacing: 0;
+  font-size: clamp(2.5rem, 10vw, 5rem); /* Reduced size - nhỏ phù hợp người nhìn */
+  color: #ffd700; /* Unified Gold Color for 2025 and 2026 */
+  text-shadow: 0 0 15px #ff3366, 0 0 30px #ff3366;
+  white-space: nowrap;
+  overflow: visible !important; /* Allow flying from outside */
 }
 
 .year-number > span {
@@ -91,30 +87,20 @@ html.show-background {
   padding: 0;
 }
 
-.year-number .digit-5,
-.year-number .digit-6 {
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+/* Year Animation Logic Update */
+.digit-wrapper {
+  overflow: visible !important;
+  width: 0.55em; /* Reduced width to make it tighter (khít hơn) */
+  margin-left: -0.05em; /* Negative margin to pull it closer */
 }
-
-.year-number .digit-5 {
-  opacity: 1;
-}
-
-.year-number .digit-6 {
-  position: absolute;
-  transform: translateX(300vw);
-  opacity: 0;
-}
-
-.year-number.animate-digit .digit-5 {
-  transform: translateX(-300vw);
-  opacity: 0;
-}
-
-.year-number.animate-digit .digit-6 {
-  position: static;
-  transform: translateX(0);
-  opacity: 1;
+.digit-new {
+  transform: translateX(100vw) !important; /* Fly from right screen */
+  color: #ffd700; /* Gold pop */
+  text-shadow: 
+    0 0 10px rgba(255, 255, 255, 0.8),
+    0 0 20px rgba(255, 215, 0, 0.8),
+    0 0 40px rgba(255, 100, 100, 0.5); /* Enhanced pop */
+  font-weight: 900;
 }
 
 @keyframes yearGlow {
