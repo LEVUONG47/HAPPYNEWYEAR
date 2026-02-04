@@ -151,9 +151,7 @@
 
 <!-- Year -->
 <div class="year-display" style="opacity: 0; transition: opacity 2s;">
-  <div class="year-number">
-    <span>202</span><span class="digit-5">5</span><span class="digit-6">6</span>
-  </div>
+  <div class="year-number"><span>202</span><span class="digit-5">5</span><span class="digit-6">6</span></div>
   <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
 </div>
 
@@ -241,7 +239,7 @@
     startScreen.classList.add('hidden');
     countdown.classList.remove('hidden');
     
-    // Start countdown: 3, 2, 1 (bỏ "Bắt đầu" cuối)
+    // Start countdown: 3, 2, 1 (không bật âm thanh ngay)
     var countdownSequence = ['3', '2', '1'];
     var currentIndex = 0;
     
@@ -253,30 +251,34 @@
         countdownNumber.textContent = countdownSequence[currentIndex];
       } else {
         clearInterval(interval);
-        countdown.classList.add('hidden');
         
-        // Show Background and Year
-        html.classList.add('show-background');
-        yearDisplay.style.opacity = '1';
-        
-        // Enable sound immediately after countdown
+        // Đợi 0.5 giây sau số 1 mới ẩn countdown
         setTimeout(function() {
-          var soundBtn = document.querySelector('.sound-btn');
-          if (soundBtn) {
-            var useEl = soundBtn.querySelector('use');
-            if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
-              soundBtn.click();
+          countdown.classList.add('hidden');
+          
+          // Show Background and Year
+          html.classList.add('show-background');
+          yearDisplay.style.opacity = '1';
+          
+          // Bật âm thanh SAU KHI countdown hoàn toàn xong
+          setTimeout(function() {
+            var soundBtn = document.querySelector('.sound-btn');
+            if (soundBtn) {
+              var useEl = soundBtn.querySelector('use');
+              if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
+                soundBtn.click();
+              }
             }
-          }
+          }, 300);
+
+          // Animate digit 6 flying in after 1 second
+          setTimeout(function() {
+            yearNumber.classList.add('animate-digit');
+          }, 1000);
+
+          // Start Wishes
+          setTimeout(scheduleWish, 2000);
         }, 500);
-
-        // Animate digit 6 flying in after 1 second
-        setTimeout(function() {
-          yearNumber.classList.add('animate-digit');
-        }, 1000);
-
-        // Start Wishes
-        setTimeout(scheduleWish, 2000);
       }
     }, 1000);
   });
