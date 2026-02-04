@@ -14,8 +14,8 @@
 }
 
 html.show-background {
-  /* Background hình ảnh con ngựa - sáng hơn để thấy rõ */
-  background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.15)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* Background hình ảnh con ngựa - không có overlay để thấy rõ */
+  background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
@@ -69,7 +69,7 @@ html.show-background {
   }
 }
 
-/* Year Display - No spacing between digits */
+/* Year Display - Completely remove spacing */
 .year-number {
   font-family: 'Russo One', sans-serif;
   font-size: clamp(4rem, 15vw, 8rem);
@@ -80,12 +80,15 @@ html.show-background {
     0 5px 20px rgba(0, 0, 0, 0.5);
   filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
   animation: yearGlow 3s ease-in-out infinite;
-  font-size: 0; /* Remove whitespace between inline elements */
+  display: inline-flex;
+  gap: 0;
+  letter-spacing: 0;
 }
 
-.year-number span {
+.year-number > span {
   display: inline-block;
-  font-size: clamp(4rem, 15vw, 8rem); /* Restore font size */
+  margin: 0;
+  padding: 0;
 }
 
 .year-number .digit-5,
