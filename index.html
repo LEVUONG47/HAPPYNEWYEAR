@@ -241,6 +241,12 @@
     startScreen.classList.add('hidden');
     countdown.classList.remove('hidden');
     
+    // Tạm dừng pháo hoa tự động (nếu có)
+    var pauseBtn = document.querySelector('.pause-btn');
+    if (pauseBtn && !store.state.paused) {
+      pauseBtn.click(); // Pause pháo hoa
+    }
+    
     // Disable click trên stage để không bắn pháo hoa khi countdown
     var stageContainer = document.querySelector('.stage-container');
     if (stageContainer) {
@@ -260,7 +266,7 @@
       } else {
         clearInterval(interval);
         
-        // Đợi 1 giây sau số 1
+        // Đợi 1.5 giây sau số 1 để thấy rõ countdown xong
         setTimeout(function() {
           countdown.classList.add('hidden');
           
@@ -273,8 +279,14 @@
             stageContainer.style.pointerEvents = 'auto';
           }
           
-          // Bật âm thanh sau 1 giây
+          // Resume pháo hoa và bật âm thanh sau 1 giây
           setTimeout(function() {
+            // Resume pháo hoa
+            if (pauseBtn && store.state.paused) {
+              pauseBtn.click(); // Resume
+            }
+            
+            // Bật âm thanh
             var soundBtn = document.querySelector('.sound-btn');
             if (soundBtn) {
               var useEl = soundBtn.querySelector('use');
