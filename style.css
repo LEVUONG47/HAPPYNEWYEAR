@@ -9,15 +9,15 @@
   }
   
   html {
-  /* Background hình con ngựa - test với link khác nếu không load */
-  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* Background hình con ngựa - dùng file local image.png */
+  background: #000 url('./image.png') no-repeat center center fixed;
   background-size: cover;
   transition: background 1s ease;
 }
 
 html.show-background {
   /* Giữ nguyên background hình con ngựa */
-  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  background: #000 url('./image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
