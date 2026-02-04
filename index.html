@@ -19,9 +19,8 @@
       left: 0;
       width: 100%;
       height: 100%;
-      /* Background hình ảnh cho màn hình bắt đầu - thay URL bằng link ảnh của bạn */
-      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1514897575457-c4db467cf78e?q=80&w=2070') no-repeat center center;
-      background-size: cover;
+      /* Background đẹp cho màn hình bắt đầu */
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -152,7 +151,7 @@
 <!-- Year -->
 <div class="year-display" style="opacity: 0; transition: opacity 2s;">
   <div class="year-number">
-    <span class="year-prefix">202</span><span class="digit-5">5</span><span class="digit-6">6</span>
+    <span class="year-prefix">202</span><span class="digit-5">6</span><span class="digit-6" style="display: none;"></span>
   </div>
   <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
 </div>
@@ -228,6 +227,22 @@
 
 <script>
 (function() {
+  // QUAN TRỌNG: Ẩn tất cả UI pháo hoa ngay từ đầu
+  var stageContainer = document.querySelector('.stage-container');
+  var yearDisplay = document.querySelector('.year-display');
+  var curvedText = document.querySelector('.curved-text-container');
+  
+  // Ẩn hoàn toàn UI pháo hoa ban đầu
+  if (stageContainer) {
+    stageContainer.style.display = 'none';
+  }
+  if (yearDisplay) {
+    yearDisplay.style.display = 'none';
+  }
+  if (curvedText) {
+    curvedText.style.display = 'none';
+  }
+
   // PAUSE pháo hoa ngay khi page load
   window.addEventListener('load', function() {
     setTimeout(function() {
@@ -248,7 +263,6 @@
   var startScreen = document.getElementById('startScreen');
   var countdown = document.getElementById('countdown');
   var countdownNumber = document.querySelector('.countdown-number');
-  var yearDisplay = document.querySelector('.year-display');
   var yearNumber = document.querySelector('.year-number');
   var html = document.documentElement;
 
@@ -256,12 +270,6 @@
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
     countdown.classList.remove('hidden');
-    
-    // Disable click trên stage để không bắn pháo hoa khi countdown
-    var stageContainer = document.querySelector('.stage-container');
-    if (stageContainer) {
-      stageContainer.style.pointerEvents = 'none';
-    }
     
     // Start countdown: 3, 2, 1
     var countdownSequence = ['3', '2', '1'];
@@ -276,17 +284,24 @@
       } else {
         clearInterval(interval);
         
-        // Đợi 1.5 giây sau số 1 để thấy rõ countdown xong
+        // Đợi 1 giây sau số 1 để thấy rõ countdown xong
         setTimeout(function() {
           countdown.classList.add('hidden');
           
-          // Show Background and Year
+          // Show Background, UI và Year
           html.classList.add('show-background');
-          yearDisplay.style.opacity = '1';
           
-          // Enable click trên stage - cho phép user click bắn pháo hoa
+          // Hiện lại tất cả UI pháo hoa
           if (stageContainer) {
+            stageContainer.style.display = 'flex';
             stageContainer.style.pointerEvents = 'auto';
+          }
+          if (yearDisplay) {
+            yearDisplay.style.display = 'block';
+            yearDisplay.style.opacity = '1';
+          }
+          if (curvedText) {
+            curvedText.style.display = 'block';
           }
           
           // Unpause pháo hoa (tự động bắn) và bật âm thanh sau 1 giây
@@ -315,7 +330,9 @@
 
           // Animate digit 6 flying in
           setTimeout(function() {
-            yearNumber.classList.add('animate-digit');
+            if (yearNumber) {
+              yearNumber.classList.add('animate-digit');
+            }
           }, 1500);
 
           // Start Wishes
