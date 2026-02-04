@@ -70,49 +70,50 @@ html.show-background {
   }
 }
 
-/* Year Display - Smaller and proper digit replacement */
+/* Year Display - Fixed: số 5 biến mất, số 6 thay thế */
 .year-number {
   font-family: 'Russo One', sans-serif;
-  font-size: clamp(2.5rem, 8vw, 4.5rem); /* Nhỏ hơn để phù hợp */
+  font-size: clamp(2.5rem, 8vw, 4.5rem);
   color: #ffd700;
   text-shadow: 
     0 0 20px rgba(255, 215, 0, 0.8),
     0 0 40px rgba(255, 215, 0, 0.6);
   filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.6));
   animation: yearGlow 3s ease-in-out infinite;
-  display: inline-flex;
-  position: relative;
 }
 
-.year-number .year-prefix,
-.year-number .digit-5,
-.year-number .digit-6 {
+.year-number .year-prefix {
   display: inline-block;
 }
 
+.year-number .digit-5,
+.year-number .digit-6 {
+  display: inline-block;
+  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+/* Ban đầu: số 5 hiện, số 6 ẩn ở ngoài màn hình */
 .year-number .digit-5 {
   opacity: 1;
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  position: relative;
 }
 
 .year-number .digit-6 {
   position: absolute;
-  left: 100%;
   transform: translateX(300vw);
   opacity: 0;
-  transition: all 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
-/* Khi animate: số 5 biến mất hoàn toàn, số 6 xuất hiện */
+/* Khi animate: số 5 bay đi và ẩn, số 6 bay vào */
 .year-number.animate-digit .digit-5 {
   transform: translateX(-300vw);
   opacity: 0;
-  display: none; /* Ẩn hoàn toàn số 5 */
+  width: 0; /* Thu nhỏ width để số 6 chiếm chỗ */
+  overflow: hidden;
 }
 
 .year-number.animate-digit .digit-6 {
   position: relative;
-  left: 0;
   transform: translateX(0);
   opacity: 1;
 }
