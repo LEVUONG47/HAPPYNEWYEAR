@@ -130,7 +130,7 @@ const store = {
 				: IS_HEADER 
 					? '1.2' // Profile header default (doesn't need to be an int)
 					: '2', // Mobile default
-			autoLaunch: false, // DISABLE autoLaunch to prevent auto-firing during countdown
+			autoLaunch: true, // ENABLE autoLaunch - will start AFTER countdown
 			finale: false,
 			skyLighting: SKY_LIGHT_NORMAL + '',
 			hideControls: IS_HEADER,
