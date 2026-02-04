@@ -19,8 +19,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      /* Gradient background cho màn hình bắt đầu */
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      /* Background hình ảnh cho màn hình bắt đầu - thay URL bằng link ảnh của bạn */
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1514897575457-c4db467cf78e?q=80&w=2070') no-repeat center center;
+      background-size: cover;
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -29,15 +30,14 @@
       cursor: pointer;
     }
     .start-screen h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 300;
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      color: #fff;
-      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+      font-family: 'Great Vibes', cursive;
+      font-weight: 700;
+      font-size: clamp(3.5rem, 10vw, 6rem);
+      color: #ffd700;
+      text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.5);
       margin-bottom: 20px;
       animation: pulse 2s ease-in-out infinite;
-      letter-spacing: 8px;
-      text-transform: uppercase;
+      letter-spacing: 4px;
     }
     .start-screen p {
       font-family: 'Russo One', sans-serif;
@@ -150,7 +150,9 @@
 
 <!-- Year -->
 <div class="year-display" style="opacity: 0; transition: opacity 2s;">
-  <div class="year-number">2026</div>
+  <div class="year-number">
+    <span>202</span><span class="digit-5">5</span><span class="digit-6">6</span>
+  </div>
   <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
 </div>
 
@@ -235,15 +237,7 @@
 
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
-    // Enable sound
-    var soundBtn = document.querySelector('.sound-btn');
-    if (soundBtn) {
-      var useEl = soundBtn.querySelector('use');
-      if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
-        soundBtn.click();
-      }
-    }
-
+    
     // Start Countdown
     countdown.classList.remove('hidden');
     var count = 3;
@@ -260,6 +254,22 @@
         // Show Background and Year
         html.classList.add('show-background');
         yearDisplay.style.opacity = '1';
+        
+        // Enable sound AFTER countdown
+        setTimeout(function() {
+          var soundBtn = document.querySelector('.sound-btn');
+          if (soundBtn) {
+            var useEl = soundBtn.querySelector('use');
+            if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
+              soundBtn.click();
+            }
+          }
+        }, 500);
+
+        // Animate digit 6 flying in after 1 second
+        setTimeout(function() {
+          yearNumber.classList.add('animate-digit');
+        }, 1000);
 
         // Start Wishes
         setTimeout(scheduleWish, 2000);
