@@ -70,19 +70,27 @@ html.show-background {
   }
 }
 
-/* Year Display - Số 5 HOÀN TOÀN biến mất, không chiếm chỗ */
+/* Year Display - Số 2026 RÕ HƠN, TO HƠN */
 .year-number {
   font-family: 'Russo One', sans-serif;
-  font-size: clamp(2.5rem, 8vw, 4.5rem);
-  /* Gradient màu đẹp cho 2026 */
-  background: linear-gradient(45deg, #ffd700, #ff6b6b, #ffd700, #ff6b6b);
+  font-size: clamp(3.5rem, 12vw, 7rem);
+  font-weight: 900;
+  /* Gradient màu đẹp cho 2026 - RÕ HƠN */
+  background: linear-gradient(45deg, #ffd700, #ff3366, #ffd700, #ff3366);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: gradientShift 3s ease infinite;
-  filter: drop-shadow(0 5px 15px rgba(255, 215, 0, 0.8));
+  /* Shadow mạnh hơn để nổi bật */
+  filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)) 
+          drop-shadow(0 0 40px rgba(255, 51, 102, 0.8))
+          drop-shadow(0 5px 20px rgba(0, 0, 0, 0.9));
   display: inline-block;
+  text-shadow: 
+    0 0 30px rgba(255, 215, 0, 1),
+    0 0 50px rgba(255, 51, 102, 0.8),
+    0 0 70px rgba(255, 215, 0, 0.6);
 }
 
 @keyframes gradientShift {
@@ -576,10 +584,14 @@ html.show-background {
 
 .zodiac-info {
   font-family: 'Dancing Script', cursive;
-  font-size: clamp(1rem, 3vw, 1.5rem);
+  font-size: clamp(1.2rem, 3.5vw, 2rem);
+  font-weight: 700;
   color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-  margin-top: 10px;
+  text-shadow: 
+    0 0 15px rgba(255, 215, 0, 1),
+    0 0 30px rgba(255, 215, 0, 0.8),
+    0 3px 10px rgba(0, 0, 0, 0.9);
+  margin-top: 15px;
 }
 
 /* Wishes */
