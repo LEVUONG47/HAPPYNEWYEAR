@@ -239,12 +239,15 @@
   // Wait for user click to start
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
-    // Sound will be enabled after countdown finishes
-
-    // Start Countdown
     countdown.classList.remove('hidden');
     
-    // Start countdown: 3, 2, 1 (không bật âm thanh ngay)
+    // Disable click trên stage để không bắn pháo hoa khi countdown
+    var stageContainer = document.querySelector('.stage-container');
+    if (stageContainer) {
+      stageContainer.style.pointerEvents = 'none';
+    }
+    
+    // Start countdown: 3, 2, 1
     var countdownSequence = ['3', '2', '1'];
     var currentIndex = 0;
     
@@ -256,28 +259,39 @@
         countdownNumber.textContent = countdownSequence[currentIndex];
       } else {
         clearInterval(interval);
-        countdown.classList.add('hidden');
         
-        // Show Background and Year
-        html.classList.add('show-background');
-        yearDisplay.style.opacity = '1';
-
-        // Start Sound (Delayed until countdown finishes)
-        var soundBtn = document.querySelector('.sound-btn');
-        if (soundBtn) {
-          var useEl = soundBtn.querySelector('use');
-          if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
-            soundBtn.click();
-          }
-        }
-
-        // Animate 2025 -> 2026 after a delay
+        // Đợi 1 giây sau số 1
         setTimeout(function() {
-          yearNumber.classList.add('animate');
-        }, 1500);
+          countdown.classList.add('hidden');
+          
+          // Show Background and Year
+          html.classList.add('show-background');
+          yearDisplay.style.opacity = '1';
+          
+          // Enable click trên stage - BÂY GIỜ MỚI cho phép bắn pháo hoa
+          if (stageContainer) {
+            stageContainer.style.pointerEvents = 'auto';
+          }
+          
+          // Bật âm thanh sau 1 giây
+          setTimeout(function() {
+            var soundBtn = document.querySelector('.sound-btn');
+            if (soundBtn) {
+              var useEl = soundBtn.querySelector('use');
+              if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
+                soundBtn.click();
+              }
+            }
+          }, 1000);
 
-        // Start Wishes
-        setTimeout(scheduleWish, 2000);
+          // Animate digit 6 flying in
+          setTimeout(function() {
+            yearNumber.classList.add('animate-digit');
+          }, 1500);
+
+          // Start Wishes
+          setTimeout(scheduleWish, 2500);
+        }, 1000);
       }
     }, 1000);
   });
