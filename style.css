@@ -14,8 +14,8 @@
 }
 
 html.show-background {
-  /* Background hình ảnh con ngựa cho màn hình pháo hoa - làm mờ để pháo hoa nổi bật */
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
+  /* Background hình ảnh con ngựa cho màn hình pháo hoa - vừa đủ mờ để thấy rõ hình */
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
   background-size: cover;
 }
 
