@@ -123,14 +123,15 @@
   </style>
 </head>
 <body>
-<!-- Countdown -->
-<div id="countdown" class="countdown-container hidden">
-  <div class="countdown-number"></div>
-</div>
-
 <!-- Start Screen - Click to enable sound -->
 <div class="start-screen" id="startScreen">
   <h1 class="start-btn-text">Bắt đầu</h1>
+  <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Nhấn để bắt đầu</p>
+</div>
+
+<!-- Countdown -->
+<div id="countdown" class="countdown-container hidden">
+  <div class="countdown-number"></div>
 </div>
 
 <!-- Curved Title -->
@@ -227,7 +228,7 @@
 
 <script>
 (function() {
-  // Start screen - enable sound on click
+  // Start screen - click to begin
   var startScreen = document.getElementById('startScreen');
   var countdown = document.getElementById('countdown');
   var countdownNumber = document.querySelector('.countdown-number');
@@ -235,18 +236,21 @@
   var yearNumber = document.querySelector('.year-number');
   var html = document.documentElement;
 
+  // Wait for user click to start
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
-    
-    // Start Countdown
     countdown.classList.remove('hidden');
-    var count = 3;
-    countdownNumber.textContent = count;
+    
+    // Start countdown: 3, 2, 1, Bắt đầu
+    var countdownSequence = ['3', '2', '1', 'Bắt đầu'];
+    var currentIndex = 0;
+    
+    countdownNumber.textContent = countdownSequence[currentIndex];
 
     var interval = setInterval(function() {
-      count--;
-      if (count > 0) {
-        countdownNumber.textContent = count;
+      currentIndex++;
+      if (currentIndex < countdownSequence.length) {
+        countdownNumber.textContent = countdownSequence[currentIndex];
       } else {
         clearInterval(interval);
         countdown.classList.add('hidden');
@@ -316,9 +320,6 @@
     showRandomWish();
     setTimeout(scheduleWish, 2500 + Math.random() * 2000);
   }
-
-  // Removed auto-start of wishes, now triggered after countdown
-  // setTimeout(scheduleWish, 1500);
 })();
 </script>
 </body>
