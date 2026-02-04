@@ -119,6 +119,9 @@
   </style>
 </head>
 <body>
+<!-- Countdown -->
+<div id="countdown" class="countdown-container hidden"></div>
+
 <!-- Start Screen - Click to enable sound -->
 <div class="start-screen" id="startScreen">
   <h1>🎆 Chúc Mừng Năm Mới 2026 🎆</h1>
@@ -141,9 +144,15 @@
 </div>
 
 <!-- Year -->
-<div class="year-display">
-  <div class="year-number">2026</div>
- <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div> 
+<div class="year-display" style="opacity: 0; transition: opacity 2s;">
+  <div class="year-number">
+    <span>202</span>
+    <span class="digit-wrapper">
+      <span class="digit-old">5</span>
+      <span class="digit-new">6</span>
+    </span>
+  </div>
+  <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
 </div>
 
 <!-- Wishes Container -->
@@ -219,6 +228,11 @@
 (function() {
   // Start screen - enable sound on click
   var startScreen = document.getElementById('startScreen');
+  var countdown = document.getElementById('countdown');
+  var yearDisplay = document.querySelector('.year-display');
+  var yearNumber = document.querySelector('.year-number');
+  var html = document.documentElement;
+
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
     // Enable sound
@@ -229,6 +243,33 @@
         soundBtn.click();
       }
     }
+
+    // Start Countdown
+    countdown.classList.remove('hidden');
+    var count = 3;
+    countdown.textContent = count;
+
+    var interval = setInterval(function() {
+      count--;
+      if (count > 0) {
+        countdown.textContent = count;
+      } else {
+        clearInterval(interval);
+        countdown.classList.add('hidden');
+        
+        // Show Background and Year
+        html.classList.add('show-background');
+        yearDisplay.style.opacity = '1';
+
+        // Animate 2025 -> 2026 after a delay
+        setTimeout(function() {
+          yearNumber.classList.add('animate');
+        }, 1500);
+
+        // Start Wishes
+        setTimeout(scheduleWish, 2000);
+      }
+    }, 1000);
   });
 
   // Wishes array
@@ -271,7 +312,8 @@
     setTimeout(scheduleWish, 2500 + Math.random() * 2000);
   }
 
-  setTimeout(scheduleWish, 1500);
+  // Removed auto-start of wishes, now triggered after countdown
+  // setTimeout(scheduleWish, 1500);
 })();
 </script>
 </body>
