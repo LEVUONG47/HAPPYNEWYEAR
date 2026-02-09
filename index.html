@@ -53,24 +53,38 @@
       }
     }
     
-    /* Landscape warning for mobile */
-    @media (orientation: landscape) and (max-width: 900px) {
-      body::before {
-        content: "Vui lòng xoay điện thoại dọc để trải nghiệm tốt nhất 📱";
+    /* Force landscape on mobile for video */
+    @media (orientation: portrait) and (max-width: 768px) {
+      #mainVideo.show-background {
+        display: none !important;
+      }
+      
+      /* Show rotation message when video is playing */
+      body.video-playing::after {
+        content: "📱 Vui lòng xoay ngang điện thoại để xem video đầy đủ";
         position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         color: #ffd700;
-        padding: 20px 30px;
-        border-radius: 10px;
+        padding: 30px 40px;
+        border-radius: 15px;
         z-index: 99999;
         font-family: 'Russo One', sans-serif;
-        font-size: 14px;
+        font-size: clamp(14px, 4vw, 18px);
         text-align: center;
-        max-width: 80%;
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+        max-width: 85%;
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+        animation: pulse 2s ease-in-out infinite;
+        line-height: 1.6;
+      }
+    }
+    
+    /* Landscape warning for mobile */
+    @media (orientation: landscape) and (max-width: 900px) {
+      body::before {
+        display: none;
       }
     }
     
@@ -347,6 +361,9 @@
     mainVideo.classList.add('show-background');
     console.log('Video display enabled via CSS class');
     
+    // Add class to body for rotation message
+    document.body.classList.add('video-playing');
+    
     // Unmute video for sound
     mainVideo.muted = false;
     
@@ -370,6 +387,9 @@
       mainVideo.currentTime = 10.0;
       
       window.videoCompleted = true;
+      
+      // Remove video-playing class
+      document.body.classList.remove('video-playing');
       
       console.log('Video ended at 10s - Transitioning to fireworks...');
       
