@@ -53,41 +53,6 @@
       }
     }
     
-    /* Force landscape on mobile for video */
-    @media (orientation: portrait) and (max-width: 768px) {
-      #mainVideo.show-background {
-        display: none !important;
-      }
-      
-      /* Show rotation message when video is playing */
-      body.video-playing::after {
-        content: "📱 Vui lòng xoay ngang điện thoại để xem video đầy đủ";
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0,0,0,0.95);
-        color: #ffd700;
-        padding: 30px 40px;
-        border-radius: 15px;
-        z-index: 99999;
-        font-family: 'Russo One', sans-serif;
-        font-size: clamp(14px, 4vw, 18px);
-        text-align: center;
-        max-width: 85%;
-        box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
-        animation: pulse 2s ease-in-out infinite;
-        line-height: 1.6;
-      }
-    }
-    
-    /* Landscape warning for mobile */
-    @media (orientation: landscape) and (max-width: 900px) {
-      body::before {
-        display: none;
-      }
-    }
-    
     /* Start screen for sound */
     .start-screen {
       position: fixed;
@@ -218,6 +183,70 @@
       0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 107, 107, 0.6); }
       50% { text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 215, 0, 1), 0 0 35px rgba(255, 107, 107, 0.8); }
     }
+    
+    /* Fullscreen button for mobile */
+    .fullscreen-mobile-btn {
+      position: fixed;
+      bottom: max(20px, env(safe-area-inset-bottom, 20px));
+      right: 20px;
+      z-index: 9998;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 24px;
+      font-family: 'Russo One', sans-serif;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s ease;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    
+    .fullscreen-mobile-btn:active {
+      transform: scale(0.95);
+    }
+    
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    /* Exit fullscreen button */
+    .exit-fullscreen-btn {
+      position: fixed;
+      top: max(20px, env(safe-area-inset-top, 20px));
+      right: 20px;
+      z-index: 99999;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+    
+    .exit-fullscreen-btn:active {
+      transform: scale(0.9);
+      background: rgba(255, 0, 0, 0.7);
+    }
+    
+    /* Hide fullscreen button on desktop */
+    @media (min-width: 1024px) {
+      .fullscreen-mobile-btn,
+      .exit-fullscreen-btn {
+        display: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -226,6 +255,21 @@
   <h1>🎆 Chúc Mừng Năm Mới 2026 🎆</h1>
   <p>👆 Nhấn vào đây để bắt đầu 👆</p>
 </div>
+
+<!-- Fullscreen button for mobile -->
+<button id="fullscreenBtn" class="fullscreen-mobile-btn" style="display: none;">
+  <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+  </svg>
+  <span>Xem Toàn Màn Hình</span>
+</button>
+
+<!-- Exit fullscreen button -->
+<button id="exitFullscreenBtn" class="exit-fullscreen-btn" style="display: none;">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+    <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+  </svg>
+</button>
 
 <!-- Video Screen - Background -->
 <video id="mainVideo" playsinline preload="auto" muted>
@@ -329,6 +373,82 @@
 (function() {
   // Prevent fireworks from starting automatically
   window.videoCompleted = false;
+  
+  // Fullscreen and orientation management
+  var fullscreenBtn = document.getElementById('fullscreenBtn');
+  var exitFullscreenBtn = document.getElementById('exitFullscreenBtn');
+  var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  // Show fullscreen button on mobile after start screen
+  if (isMobile) {
+    setTimeout(function() {
+      fullscreenBtn.style.display = 'flex';
+    }, 500);
+  }
+  
+  // Fullscreen button click
+  fullscreenBtn.addEventListener('click', async function() {
+    try {
+      // Request fullscreen
+      var elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        await elem.requestFullscreen();
+      } else if (elem.webkitRequestFullscreen) {
+        await elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        await elem.msRequestFullscreen();
+      }
+      
+      // Lock to landscape orientation
+      if (screen.orientation && screen.orientation.lock) {
+        try {
+          await screen.orientation.lock('landscape');
+          console.log('Orientation locked to landscape');
+        } catch(e) {
+          console.log('Orientation lock not supported:', e);
+        }
+      }
+      
+      // Hide fullscreen button, show exit button
+      fullscreenBtn.style.display = 'none';
+      exitFullscreenBtn.style.display = 'flex';
+      
+    } catch(err) {
+      console.error('Fullscreen error:', err);
+      alert('Không thể vào chế độ toàn màn hình. Vui lòng xoay ngang điện thoại thủ công.');
+    }
+  });
+  
+  // Exit fullscreen button click
+  exitFullscreenBtn.addEventListener('click', function() {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  });
+  
+  // Listen for fullscreen changes
+  document.addEventListener('fullscreenchange', handleFullscreenChange);
+  document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+  document.addEventListener('msfullscreenchange', handleFullscreenChange);
+  
+  function handleFullscreenChange() {
+    var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+    
+    if (!isFullscreen) {
+      // Exited fullscreen
+      fullscreenBtn.style.display = isMobile ? 'flex' : 'none';
+      exitFullscreenBtn.style.display = 'none';
+      
+      // Unlock orientation
+      if (screen.orientation && screen.orientation.unlock) {
+        screen.orientation.unlock();
+      }
+    }
+  }
   
   // Override sound manager to prevent sounds before video completes
   window.addEventListener('load', function() {
