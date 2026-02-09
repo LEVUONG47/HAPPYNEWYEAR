@@ -3,15 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <title>Chúc Mừng Năm Mới 2026</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
   <link rel="shortcut icon" type="image/png" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png">
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Russo+One&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="./style.css">
   <style>
+    /* Mobile full screen support */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+    }
+    
+    html, body {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      /* Support for notch on iPhone X+ */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+    
     /* Start screen for sound */
     .start-screen {
       position: fixed;
@@ -29,17 +50,21 @@
     }
     .start-screen h1 {
       font-family: 'Great Vibes', cursive;
-      font-size: clamp(2rem, 8vw, 4rem);
+      font-size: clamp(2rem, 10vw, 4rem);
       color: #ffd700;
       text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
       margin-bottom: 20px;
       animation: pulse 2s ease-in-out infinite;
+      padding: 0 20px;
+      text-align: center;
     }
     .start-screen p {
       font-family: 'Russo One', sans-serif;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 4vw, 1.2rem);
       color: #fff;
       animation: blink 1.5s ease-in-out infinite;
+      padding: 0 20px;
+      text-align: center;
     }
     @keyframes blink {
       0%, 100% { opacity: 1; }
@@ -73,25 +98,25 @@
 
     .curved-text-container {
       position: fixed;
-      top: 5px;
+      top: max(5px, env(safe-area-inset-top));
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
       pointer-events: none;
     }
     .curved-text-container svg {
-      width: clamp(280px, 60vw, 500px);
+      width: clamp(240px, 70vw, 500px);
       height: auto;
     }
     .curved-text {
       font-family: 'Great Vibes', cursive;
-      font-size: 38px;
+      font-size: clamp(28px, 7vw, 38px);
       fill: url(#goldGradient);
       filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9));
     }
     .year-display {
       position: fixed;
-      top: clamp(70px, 12vh, 110px);
+      top: clamp(60px, 10vh, 110px);
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
@@ -100,9 +125,10 @@
     }
     .year-number {
       font-family: 'Russo One', sans-serif;
-      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-size: clamp(2rem, 8vw, 3.5rem);
       color: #fff;
-      text-shadow: 0 0 15px #ff3366, 0 0 30px #ff3366;
+      text-shadow: 0 0 15px #ff3366, 0 0 30px #ff3366, 0 0 45px #ff3366;
+      font-weight: 900;
     }
     .zodiac-info {
       font-family: 'Dancing Script', cursive;
@@ -115,13 +141,14 @@
       z-index: 80;
       pointer-events: none;
       font-family: 'Dancing Script', cursive;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-size: clamp(1rem, 3.5vw, 1.5rem);
       color: #ffd700;
       text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 107, 107, 0.6), 0 2px 8px rgba(0,0,0,0.9);
       opacity: 0;
-      max-width: 350px;
+      max-width: min(350px, 85vw);
       text-align: center;
-      padding: 10px 15px;
+      padding: 8px 12px;
+      line-height: 1.4;
     }
     .wish-item.show {
       animation: wishFade 5s ease-in-out forwards, sparkle 0.5s ease-in-out infinite;
