@@ -34,7 +34,7 @@
     bottom: 0;
   }
 
-  /* Video background */
+  /* Video background - FULL screen for all devices */
   #mainVideo {
     position: fixed !important;
     top: 0 !important;
@@ -44,10 +44,20 @@
     height: 100vh !important;
     height: -webkit-fill-available !important;
     object-fit: cover !important;
+    object-position: center center !important;
+    background-color: #000 !important;
     z-index: 5 !important;
     display: none;
     opacity: 1;
     transition: opacity 0.8s ease-out;
+  }
+  
+  /* Mobile landscape - show full video */
+  @media (orientation: landscape) and (max-width: 900px) {
+    #mainVideo {
+      object-fit: contain !important;
+      object-position: center center !important;
+    }
   }
 
   #mainVideo.show-background {
