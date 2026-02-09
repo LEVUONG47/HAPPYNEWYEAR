@@ -114,9 +114,9 @@ const store = {
 	},
 	
 	state: {
-		// KEEP PAUSED - will be unpaused AFTER countdown by custom code
+		// will be unpaused in init()
 		paused: true,
-		soundEnabled: true, // Keep sound enabled, will be controlled by button
+		soundEnabled: true,
 		menuOpen: false,
 		openHelpTopic: null,
 		fullscreen: isFullscreen(),
@@ -130,7 +130,7 @@ const store = {
 				: IS_HEADER 
 					? '1.2' // Profile header default (doesn't need to be an int)
 					: '2', // Mobile default
-			autoLaunch: true, // ENABLE autoLaunch - will start AFTER countdown
+			autoLaunch: true,
 			finale: false,
 			skyLighting: SKY_LIGHT_NORMAL + '',
 			hideControls: IS_HEADER,
