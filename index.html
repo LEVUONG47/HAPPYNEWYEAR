@@ -146,7 +146,7 @@
 </div>
 
 <!-- Video Screen - Background -->
-<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;" playsinline preload="auto" muted>
+<video id="mainVideo" playsinline preload="auto" muted>
   <source src="./real.mp4" type="video/mp4">
   Trình duyệt của bạn không hỗ trợ video.
 </video>
@@ -255,9 +255,9 @@
   
   startScreen.addEventListener('click', function() {
     startScreen.classList.add('hidden');
-    // Show and play video
-    mainVideo.style.display = 'block';
-    console.log('Video display set to block');
+    // Show video by adding class
+    mainVideo.classList.add('show-background');
+    console.log('Video display enabled via CSS class');
     
     // Unmute video for sound
     mainVideo.muted = false;
@@ -287,21 +287,17 @@
       
       console.log('Video paused at 9.0s - KEEPING VIDEO AS BACKGROUND');
       
-      // FORCE ALL BACKGROUNDS TO TRANSPARENT IMMEDIATELY WITH !important
-      document.documentElement.setAttribute('style', 'background-color: transparent !important;');
-      document.body.setAttribute('style', 'background-color: transparent !important;');
-      
-      // KEEP VIDEO VISIBLE - DO NOT HIDE IT
-      mainVideo.style.display = 'block';
-      mainVideo.style.zIndex = '1'; // Below everything - as background
+      // Add class to show video as background
+      mainVideo.classList.add('show-background');
       
       // Force video to render by playing and pausing again
       setTimeout(function() {
         mainVideo.play();
         setTimeout(function() {
           mainVideo.pause();
+          mainVideo.currentTime = 9.0;
           console.log('Video re-paused at 9.0s to force render');
-        }, 200); // Increase delay to 200ms
+        }, 200);
       }, 100);
       
       // Start fireworks on top of video
@@ -316,10 +312,9 @@
   function startFireworks() {
     console.log('=== START FIREWORKS FUNCTION ===');
     
-    // ENSURE VIDEO STAYS VISIBLE
-    mainVideo.style.display = 'block';
-    mainVideo.style.zIndex = '1';
-    console.log('Video forced to stay visible');
+    // ENSURE VIDEO STAYS VISIBLE with class
+    mainVideo.classList.add('show-background');
+    console.log('Video forced to stay visible with CSS class');
     
     // Start wishes when fireworks start
     setTimeout(scheduleWish, 1500);
@@ -366,14 +361,6 @@
           toggleSound(true);
           console.log('Sound enabled');
         }
-        
-        // Monitor video visibility every 100ms
-        setInterval(function() {
-          if (mainVideo.style.display !== 'block') {
-            mainVideo.style.display = 'block';
-            console.log('[MONITOR] FORCED video back to block!');
-          }
-        }, 100);
         
         // Enable auto-launch
         if (store && store.state && store.state.config) {
@@ -429,4 +416,3 @@
 </script>
 </body>
 </html>
-
