@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#000000">
   <link rel="shortcut icon" type="image/png" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/firework-burst-icon-v2.png">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Russo+One&family=Great+Vibes&family=Montserrat:wght@100;300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Russo+One&family=Great+Vibes&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel="stylesheet" href="./style.css">
   <style>
@@ -19,8 +19,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      /* Background đẹp cho màn hình bắt đầu */
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: rgba(0,0,0,0.9);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -30,13 +29,11 @@
     }
     .start-screen h1 {
       font-family: 'Great Vibes', cursive;
-      font-weight: 700;
-      font-size: clamp(3.5rem, 10vw, 6rem);
+      font-size: clamp(2rem, 8vw, 4rem);
       color: #ffd700;
-      text-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 50px rgba(255, 215, 0, 0.5);
+      text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
       margin-bottom: 20px;
       animation: pulse 2s ease-in-out infinite;
-      letter-spacing: 4px;
     }
     .start-screen p {
       font-family: 'Russo One', sans-serif;
@@ -53,6 +50,26 @@
       50% { transform: scale(1.05); }
     }
     .start-screen.hidden { display: none; }
+
+    /* Video screen */
+    .video-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 9998;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .video-screen.hidden { display: none; }
+    .video-screen video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     .curved-text-container {
       position: fixed;
@@ -91,7 +108,7 @@
       font-family: 'Dancing Script', cursive;
       font-size: clamp(0.8rem, 2vw, 1.1rem);
       color: #ffd700;
-      text-shadow: 0 0 10px #ffd700cc;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
     }
     .wish-item {
       position: fixed;
@@ -124,37 +141,21 @@
 <body>
 <!-- Start Screen - Click to enable sound -->
 <div class="start-screen" id="startScreen">
-  <h1 class="start-btn-text">Bắt đầu</h1>
-  <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Nhấn để bắt đầu</p>
+  <h1>🎆 Chúc Mừng Năm Mới 2026 🎆</h1>
+  <p>👆 Nhấn vào đây để bắt đầu 👆</p>
 </div>
 
-<!-- Countdown -->
-<div id="countdown" class="countdown-container hidden">
-  <div class="countdown-number"></div>
-</div>
+<!-- Video Screen - Background -->
+<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted>
+  <source src="https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/real.mp4" type="video/mp4">
+  Trình duyệt của bạn không hỗ trợ video.
+</video>
 
-<!-- Curved Title -->
-<div class="curved-text-container">
-  <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" style="stop-color:#ffd700"><animate attributeName="stop-color" values="#ffd700;#ff6b6b;#ffd700" dur="3s" repeatCount="indefinite"/></stop>
-        <stop offset="50%" style="stop-color:#ff6b6b"><animate attributeName="stop-color" values="#ff6b6b;#ffd700;#ff6b6b" dur="3s" repeatCount="indefinite"/></stop>
-        <stop offset="100%" style="stop-color:#ffd700"><animate attributeName="stop-color" values="#ffd700;#ff6b6b;#ffd700" dur="3s" repeatCount="indefinite"/></stop>
-      </linearGradient>
-      <path id="textCurve" d="M 20,75 Q 200,5 380,75" fill="transparent"/>
-    </defs>
-    <text class="curved-text"><textPath href="#textCurve" startOffset="50%" text-anchor="middle">Chúc Mừng Năm Mới</textPath></text>
-  </svg>
-</div>
+<!-- Background Image (captured from video) -->
+<img id="bgImage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;" alt="Background" />
 
-<!-- Year -->
-<div class="year-display" style="opacity: 0; transition: opacity 2s;">
-  <div class="year-number">
-    <span class="year-prefix">202</span><span class="digit-5">6</span><span class="digit-6" style="display: none;"></span>
-  </div>
-  <div class="zodiac-info">Năm Bính Ngọ - Mã Đáo Thành Công</div>
-</div>
+<!-- Hidden canvas for capturing video frame -->
+<canvas id="captureCanvas" style="display: none;"></canvas>
 
 <!-- Wishes Container -->
 <div id="wishesContainer"></div>
@@ -227,135 +228,134 @@
 
 <script>
 (function() {
-  // QUAN TRỌNG: Ẩn tất cả UI pháo hoa ngay từ đầu
-  var stageContainer = document.querySelector('.stage-container');
-  var yearDisplay = document.querySelector('.year-display');
-  var curvedText = document.querySelector('.curved-text-container');
+  // Prevent fireworks from starting automatically
+  window.videoCompleted = false;
   
-  // Ẩn hoàn toàn UI pháo hoa ban đầu
-  if (stageContainer) {
-    stageContainer.style.display = 'none';
-  }
-  if (yearDisplay) {
-    yearDisplay.style.display = 'none';
-  }
-  if (curvedText) {
-    curvedText.style.display = 'none';
-  }
-
-  // PAUSE pháo hoa ngay khi page load
+  // Override sound manager to prevent sounds before video completes
   window.addEventListener('load', function() {
-    setTimeout(function() {
-      // Tìm và click nút pause để dừng pháo hoa
-      var pauseBtn = document.querySelector('.pause-btn');
-      if (pauseBtn) {
-        var svg = pauseBtn.querySelector('use');
-        // Nếu đang play (icon pause), thì click để pause
-        if (svg && svg.getAttribute('href') === '#icon-pause') {
-          pauseBtn.click();
-          console.log('Paused fireworks on load');
+    if (typeof soundManager !== 'undefined' && soundManager.playSound) {
+      var originalPlaySound = soundManager.playSound;
+      soundManager.playSound = function() {
+        if (window.videoCompleted) {
+          originalPlaySound.apply(soundManager, arguments);
+        }
+      };
+    }
+  });
+  
+  // Start screen - enable sound on click and play video
+  var startScreen = document.getElementById('startScreen');
+  var mainVideo = document.getElementById('mainVideo');
+  
+  // Debug: Check video load
+  mainVideo.addEventListener('loadeddata', function() {
+    console.log('Video loaded successfully!');
+  });
+  
+  mainVideo.addEventListener('error', function(e) {
+    console.error('Video error:', e);
+  });
+  
+  startScreen.addEventListener('click', function() {
+    startScreen.classList.add('hidden');
+    // Show and play video
+    mainVideo.style.display = 'block';
+    console.log('Video display set to block');
+    
+    // Unmute video for sound
+    mainVideo.muted = false;
+    
+    var playPromise = mainVideo.play();
+    if (playPromise !== undefined) {
+      playPromise.then(function() {
+        console.log('Video playing!');
+      }).catch(function(error) {
+        console.error('Video play error:', error);
+        // If unmuted fails, try muted
+        mainVideo.muted = true;
+        mainVideo.play();
+      });
+    }
+  });
+  
+  // Listen for video time update to pause at 9.08s
+  mainVideo.addEventListener('timeupdate', function() {
+    if (mainVideo.currentTime >= 9.08 && !mainVideo.paused) {
+      mainVideo.pause();
+      window.videoCompleted = true;
+      
+      console.log('Video paused at 9.08s - keeping as background');
+      console.log('Video display:', mainVideo.style.display);
+      console.log('Video z-index:', mainVideo.style.zIndex);
+      
+      // IMPORTANT: Ensure video stays visible
+      mainVideo.style.display = 'block';
+      mainVideo.style.zIndex = '5';
+      
+      // Keep video visible as background (no need to capture due to CORS)
+      // Just start fireworks on top
+      setTimeout(function() {
+        console.log('Starting fireworks...');
+        console.log('Video still visible?', mainVideo.style.display);
+        startFireworks();
+      }, 500);
+    }
+  });
+  
+  // Function to start fireworks
+  function startFireworks() {
+    // Start wishes when fireworks start
+    setTimeout(scheduleWish, 1500);
+    
+    var checkInit = setInterval(function() {
+      if (typeof togglePause !== 'undefined' && typeof store !== 'undefined') {
+        clearInterval(checkInit);
+        
+        // Make sure the stage container is visible
+        var stageContainer = document.querySelector('.stage-container');
+        if (stageContainer) {
+          stageContainer.classList.remove('remove');
+          stageContainer.classList.add('show');
+          stageContainer.style.visibility = 'visible';
+          stageContainer.style.opacity = '1';
+        }
+        
+        // Remove loading screen if still present
+        var loadingInit = document.querySelector('.loading-init');
+        if (loadingInit) {
+          loadingInit.remove();
+        }
+        
+        // Unpause the fireworks
+        togglePause(false);
+        
+        // Enable sound for fireworks
+        if (typeof toggleSound !== 'undefined') {
+          toggleSound(true);
+        }
+        
+        // Enable auto-launch
+        if (store && store.state && store.state.config) {
+          store.state.config.autoLaunch = true;
         }
       }
     }, 100);
-  });
-  
-  // Start screen - click to begin
-  var startScreen = document.getElementById('startScreen');
-  var countdown = document.getElementById('countdown');
-  var countdownNumber = document.querySelector('.countdown-number');
-  var yearNumber = document.querySelector('.year-number');
-  var html = document.documentElement;
-
-  // Wait for user click to start
-  startScreen.addEventListener('click', function() {
-    startScreen.classList.add('hidden');
-    countdown.classList.remove('hidden');
-    
-    // Start countdown: 3, 2, 1
-    var countdownSequence = ['3', '2', '1'];
-    var currentIndex = 0;
-    
-    countdownNumber.textContent = countdownSequence[currentIndex];
-
-    var interval = setInterval(function() {
-      currentIndex++;
-      if (currentIndex < countdownSequence.length) {
-        countdownNumber.textContent = countdownSequence[currentIndex];
-      } else {
-        clearInterval(interval);
-        
-        // Đợi 1 giây sau số 1 để thấy rõ countdown xong
-        setTimeout(function() {
-          countdown.classList.add('hidden');
-          
-          // Show Background, UI và Year
-          html.classList.add('show-background');
-          
-          // Hiện lại tất cả UI pháo hoa
-          if (stageContainer) {
-            stageContainer.style.display = 'flex';
-            stageContainer.style.pointerEvents = 'auto';
-          }
-          if (yearDisplay) {
-            yearDisplay.style.display = 'block';
-            yearDisplay.style.opacity = '1';
-          }
-          if (curvedText) {
-            curvedText.style.display = 'block';
-          }
-          
-          // Unpause pháo hoa (tự động bắn) và bật âm thanh sau 1 giây
-          setTimeout(function() {
-            // Unpause pháo hoa - tự động bắn
-            var pauseBtn = document.querySelector('.pause-btn');
-            if (pauseBtn) {
-              var svg = pauseBtn.querySelector('use');
-              // Nếu đang pause (icon play), thì click để unpause
-              if (svg && svg.getAttribute('href') === '#icon-play') {
-                pauseBtn.click();
-                console.log('Unpaused - fireworks auto-launch');
-              }
-            }
-            
-            // Bật âm thanh
-            var soundBtn = document.querySelector('.sound-btn');
-            if (soundBtn) {
-              var useEl = soundBtn.querySelector('use');
-              if (useEl && useEl.getAttribute('href') === '#icon-sound-off') {
-                soundBtn.click();
-                console.log('Enabled sound');
-              }
-            }
-          }, 1000);
-
-          // Animate digit 6 flying in
-          setTimeout(function() {
-            if (yearNumber) {
-              yearNumber.classList.add('animate-digit');
-            }
-          }, 1500);
-
-          // Start Wishes
-          setTimeout(scheduleWish, 2500);
-        }, 1000);
-      }
-    }, 1000);
-  });
+  }
 
   // Wishes array
   var wishes = [
-    "Chúc năm mới an khang thịnh vượng!",
-    "Mã đáo thành công, vạn sự như ý!",
-    "Tài lộc dồi dào, tiền vào như nước!",
-    "Gia đình hạnh phúc, sum vầy êm ấm!",
-    "Sức khỏe tràn đầy, bình an may mắn!",
-    "Công danh thăng tiến, sự nghiệp rạng ngời!",
-    "Phúc Lộc Thọ đầy nhà!",
-    "Xuân sang phú quý, năm mới hanh thông!",
-    "Tình yêu viên mãn, hạnh phúc trọn đời!",
-    "Năm Ngọ phi như ngựa chiến!",
-    "Vạn sự như ý, tỷ sự như mơ!",
-    "Tân niên vạn phúc!"
+  "Năm mới cười nhiều hơn, stress ít lại!",
+  "Tiền vô ào ào, deadline tự biến mất!",
+  "Học hành nhẹ nhàng, thi đâu đậu đó!",
+  "Công việc mượt mà, sếp luôn gật đầu!",
+  "Tình duyên khởi sắc, crush chủ động nhắn tin!",
+  "Sức khỏe full pin, ngủ ngon không mộng mị!",
+  "Ví luôn dày, tài khoản không bao giờ âm!",
+  "Ra đường gặp may, về nhà gặp vui!",
+  "Mọi dự định đều chạy mượt như code không bug!",
+  "Năm mới bớt lười, nhiều động lực!",
+  "Bạn bè đông đủ, cuộc sống thêm chill!",
+  "Tết này và cả năm đều thật rực rỡ!"
   ];
 
   var container = document.getElementById('wishesContainer');
@@ -381,6 +381,9 @@
     showRandomWish();
     setTimeout(scheduleWish, 2500 + Math.random() * 2000);
   }
+
+  // Don't start wishes automatically - wait for fireworks to start
+  // setTimeout(scheduleWish, 1500);
 })();
 </script>
 </body>
