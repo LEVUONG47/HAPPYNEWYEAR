@@ -9,135 +9,8 @@
   }
   
   html {
-  /* Background hình con ngựa từ GitHub */
-  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
-  background-size: cover;
-  transition: background 1s ease;
-}
-
-html.show-background {
-  /* Giữ nguyên background hình con ngựa */
-  background: #000 url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center fixed;
-  background-size: cover;
-}
-
-.countdown-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  background: rgba(0, 0, 0, 0.95); /* Đen mờ che hình con ngựa khi countdown */
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.5s;
-}
-
-.countdown-container.hidden {
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.countdown-number {
-  font-family: 'Great Vibes', cursive;
-  font-weight: 700;
-  font-size: 25vw;
-  color: #ffd700;
-  text-shadow: 
-    0 0 40px rgba(255, 215, 0, 1),
-    0 0 80px rgba(255, 215, 0, 0.8),
-    0 0 120px rgba(255, 215, 0, 0.6),
-    0 5px 30px rgba(0, 0, 0, 0.8);
-  animation: countdownPulse 1s ease-in-out;
-}
-
-@keyframes countdownPulse {
-  0% { 
-    transform: scale(0.5);
-    opacity: 0;
+    background-color: #000;
   }
-  50% {
-    transform: scale(1.1);
-  }
-  100% { 
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Year Display - Số 2026 RÕ HƠN, TO HƠN */
-.year-number {
-  font-family: 'Russo One', sans-serif;
-  font-size: clamp(3.5rem, 12vw, 7rem);
-  font-weight: 900;
-  /* Gradient màu đẹp cho 2026 - RÕ HƠN */
-  background: linear-gradient(45deg, #ffd700, #ff3366, #ffd700, #ff3366);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: gradientShift 3s ease infinite;
-  /* Shadow mạnh hơn để nổi bật */
-  filter: drop-shadow(0 0 25px rgba(255, 215, 0, 1)) 
-          drop-shadow(0 0 40px rgba(255, 51, 102, 0.8))
-          drop-shadow(0 5px 20px rgba(0, 0, 0, 0.9));
-  display: inline-block;
-  text-shadow: 
-    0 0 30px rgba(255, 215, 0, 1),
-    0 0 50px rgba(255, 51, 102, 0.8),
-    0 0 70px rgba(255, 215, 0, 0.6);
-}
-
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.year-number .year-prefix {
-  display: inline-block;
-}
-
-.year-number .digit-5,
-.year-number .digit-6 {
-  display: inline-block;
-  transition: all 2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
-
-/* Ban đầu: số 5 hiện, số 6 ẩn hoàn toàn */
-.year-number .digit-5 {
-  opacity: 1;
-  transform: translateX(0);
-  max-width: 1em;
-}
-
-.year-number .digit-6 {
-  position: absolute;
-  left: 0;
-  transform: translateX(300vw);
-  opacity: 0;
-  max-width: 0;
-  overflow: hidden;
-}
-
-/* Khi animate: số 5 biến mất HOÀN TOÀN, số 6 xuất hiện */
-.year-number.animate-digit .digit-5 {
-  transform: translateX(-200%);
-  opacity: 0;
-  max-width: 0; /* Thu nhỏ về 0 */
-  overflow: hidden;
-}
-
-.year-number.animate-digit .digit-6 {
-  position: relative;
-  transform: translateX(0);
-  opacity: 1;
-  max-width: 1em; /* Mở rộng ra */
-}
   
   body {
     overflow: hidden;
@@ -145,6 +18,7 @@ html.show-background {
     font-family: "Russo One", arial, sans-serif;
     line-height: 1.25;
     letter-spacing: 0.06em;
+    background-color: #000;
   }
   
   .hide {
@@ -169,6 +43,10 @@ html.show-background {
             justify-content: center;
     -webkit-box-align: center;
             align-items: center;
+    background: transparent;
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
   }
   
   .loading-init {
@@ -189,8 +67,28 @@ html.show-background {
   .stage-container {
     overflow: hidden;
     box-sizing: initial;
-    border: 1px solid #222;
-    margin: -1px;
+    border: none;
+    margin: 0;
+    visibility: hidden; /* Hidden by default until video completes */
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+    background: transparent;
+  }
+  }
+  .stage-container.show {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .canvas-container {
+    pointer-events: auto;
   }
   @media (max-width: 840px) {
     .stage-container {
@@ -206,6 +104,7 @@ html.show-background {
     transition: -webkit-filter 0.3s;
     transition: filter 0.3s;
     transition: filter 0.3s, -webkit-filter 0.3s;
+    background: transparent;
   }
   .canvas-container canvas {
     position: absolute;
@@ -502,138 +401,3 @@ html.show-background {
     -webkit-transition-duration: 0.4s;
             transition-duration: 0.4s;
   }
-
-/* Old Start Button Styles - Overwritten below */
-.start-screen .start-btn-text-old-delete-me {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 300;
-  font-size: clamp(2rem, 5vw, 4rem);
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 5px;
-  border: 2px solid #fff;
-  padding: 15px 40px;
-  border-radius: 50px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
-  animation: pulse 2s infinite;
-}
-
-.start-screen .start-btn-text:hover-old-delete-me {
-  background: #fff;
-  color: #000;
-  box-shadow: 0 0 20px #fff;
-}
-
-.start-screen h1 {
-  /* Legacy style override */
-  display: none; 
-}
-.start-screen p {
-  display: none;
-}
-
-/* Re-enable for the new class */
-.start-screen h1.start-btn-text {
-  display: block;
-  margin: 0;
-  text-shadow: none;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-@keyframes pulse {
-  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
-  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-}
-
-/* Curved Text */
-.curved-text-container {
-  position: fixed;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  pointer-events: none;
-}
-.curved-text-container svg {
-  width: clamp(280px, 60vw, 500px);
-  height: auto;
-}
-.curved-text {
-  font-family: 'Great Vibes', cursive;
-  font-size: 38px;
-  fill: url(#goldGradient);
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9));
-}
-
-/* Year Display */
-.year-display {
-  position: fixed;
-  top: clamp(70px, 12vh, 110px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  pointer-events: none;
-  text-align: center;
-}
-
-.zodiac-info {
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(1.2rem, 3.5vw, 2rem);
-  font-weight: 700;
-  color: #ffd700;
-  text-shadow: 
-    0 0 15px rgba(255, 215, 0, 1),
-    0 0 30px rgba(255, 215, 0, 0.8),
-    0 3px 10px rgba(0, 0, 0, 0.9);
-  margin-top: 15px;
-}
-
-/* Wishes */
-.wish-item {
-  position: fixed;
-  z-index: 80;
-  pointer-events: none;
-  font-family: 'Dancing Script', cursive;
-  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 107, 107, 0.6), 0 2px 8px rgba(0,0,0,0.9);
-  opacity: 0;
-  max-width: 350px;
-  text-align: center;
-  padding: 10px 15px;
-}
-.wish-item.show {
-  animation: wishFade 5s ease-in-out forwards, sparkle 0.5s ease-in-out infinite;
-}
-@keyframes wishFade {
-  0% { opacity: 0; transform: scale(0.8); }
-  15% { opacity: 1; transform: scale(1); }
-  85% { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(0.8); }
-}
-@keyframes sparkle {
-  0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 107, 107, 0.6); }
-  50% { text-shadow: 0 0 15px rgba(255, 255, 255, 1), 0 0 25px rgba(255, 215, 0, 1), 0 0 35px rgba(255, 107, 107, 0.8); }
-}
-
-/* Các comment hướng dẫn thay đổi background:
-   
-   1. Để thay đổi background màn hình COUNTDOWN (3-2-1):
-      Tìm .countdown-container và thay đổi thuộc tính background
-      Ví dụ:
-      - Gradient: background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      - Màu đơn: background: #1a1a2e;
-      - Hình ảnh: background: url('link-anh.jpg') no-repeat center center; background-size: cover;
-   
-   2. Để thay đổi background màn hình PHÁO HOA (sau countdown):
-      Tìm html.show-background và thay đổi thuộc tính background
-      
-   3. Để thay đổi background màn hình BẮT ĐẦU:
-      Tìm .start-screen và thay đổi thuộc tính background
-*/
