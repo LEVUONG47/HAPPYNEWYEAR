@@ -9,7 +9,7 @@
   }
   
   html {
-    background-color: #000;
+    background-color: transparent !important;
   }
   
   body {
@@ -18,7 +18,7 @@
     font-family: "Russo One", arial, sans-serif;
     line-height: 1.25;
     letter-spacing: 0.06em;
-    background-color: transparent;
+    background-color: transparent !important;
   }
   
   .hide {
@@ -43,7 +43,7 @@
             justify-content: center;
     -webkit-box-align: center;
             align-items: center;
-    background: transparent;
+    background: transparent !important;
     position: relative;
     z-index: 10;
     pointer-events: none;
