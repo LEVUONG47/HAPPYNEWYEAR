@@ -275,46 +275,78 @@
     }
   });
   
-  // Listen for video time update to pause at 9s
+  // Listen for video time update to pause at 10s
   mainVideo.addEventListener('timeupdate', function() {
-    if (mainVideo.currentTime >= 9.0 && !mainVideo.paused) {
+    if (mainVideo.currentTime >= 10.0 && !mainVideo.paused) {
       mainVideo.pause();
       
-      // Seek to exact frame to ensure it renders
-      mainVideo.currentTime = 9.0;
+      // Seek to exact frame
+      mainVideo.currentTime = 10.0;
       
       window.videoCompleted = true;
       
-      console.log('Video paused at 9.0s - KEEPING VIDEO AS BACKGROUND');
+      console.log('Video paused at 10.0s - Capturing frame as background');
       
-      // Add class to show video as background
-      mainVideo.classList.add('show-background');
+      // CAPTURE video frame as background
+      captureVideoFrame();
       
-      // Force video to render by playing and pausing again
+      // Smooth transition to fireworks after 800ms
       setTimeout(function() {
-        mainVideo.play();
-        setTimeout(function() {
-          mainVideo.pause();
-          mainVideo.currentTime = 9.0;
-          console.log('Video re-paused at 9.0s to force render');
-        }, 200);
-      }, 100);
-      
-      // Start fireworks on top of video
-      setTimeout(function() {
-        console.log('Starting fireworks on top of video...');
+        console.log('Starting smooth transition to fireworks...');
         startFireworks();
-      }, 500);
+      }, 800);
     }
   });
+  
+  // Function to capture video frame as background
+  function captureVideoFrame() {
+    try {
+      // Create canvas to capture video frame
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+      
+      // Set canvas size to video dimensions
+      canvas.width = mainVideo.videoWidth || 1920;
+      canvas.height = mainVideo.videoHeight || 1080;
+      
+      // Draw current video frame
+      ctx.drawImage(mainVideo, 0, 0, canvas.width, canvas.height);
+      
+      // Convert to data URL (JPEG 95% quality)
+      var frameDataUrl = canvas.toDataURL('image/jpeg', 0.95);
+      
+      console.log('Video frame captured successfully');
+      
+      // Apply as background with smooth fade
+      document.documentElement.style.backgroundImage = 'url(' + frameDataUrl + ')';
+      document.documentElement.style.backgroundSize = 'cover';
+      document.documentElement.style.backgroundPosition = 'center center';
+      document.documentElement.style.backgroundRepeat = 'no-repeat';
+      document.documentElement.style.backgroundAttachment = 'fixed';
+      
+      // Fade out video, fade in background
+      mainVideo.style.transition = 'opacity 0.8s ease-out';
+      mainVideo.style.opacity = '0';
+      
+      // Remove video after fade out
+      setTimeout(function() {
+        mainVideo.style.display = 'none';
+        console.log('Video hidden, background visible');
+      }, 800);
+      
+    } catch(e) {
+      console.error('Error capturing video frame:', e);
+      // Fallback: just hide video
+      mainVideo.style.opacity = '0';
+      setTimeout(function() {
+        mainVideo.style.display = 'none';
+      }, 800);
+    }
+  }
   
   // Function to start fireworks
   function startFireworks() {
     console.log('=== START FIREWORKS FUNCTION ===');
-    
-    // ENSURE VIDEO STAYS VISIBLE with class
-    mainVideo.classList.add('show-background');
-    console.log('Video forced to stay visible with CSS class');
     
     // Start wishes when fireworks start
     setTimeout(scheduleWish, 1500);
