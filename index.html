@@ -146,7 +146,7 @@
 </div>
 
 <!-- Video Screen - Background -->
-<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted>
+<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;" playsinline preload="auto" muted>
   <source src="./real.mp4" type="video/mp4">
   Trình duyệt của bạn không hỗ trợ video.
 </video>
@@ -275,32 +275,32 @@
     }
   });
   
-  // Listen for video time update to pause at 8.5s
+  // Listen for video time update to pause at 9s
   mainVideo.addEventListener('timeupdate', function() {
-    if (mainVideo.currentTime >= 8.5 && !mainVideo.paused) {
+    if (mainVideo.currentTime >= 9.0 && !mainVideo.paused) {
       mainVideo.pause();
       
       // Seek to exact frame to ensure it renders
-      mainVideo.currentTime = 8.5;
+      mainVideo.currentTime = 9.0;
       
       window.videoCompleted = true;
       
-      console.log('Video paused at 8.5s - KEEPING VIDEO AS BACKGROUND');
+      console.log('Video paused at 9.0s - KEEPING VIDEO AS BACKGROUND');
       
       // FORCE ALL BACKGROUNDS TO TRANSPARENT IMMEDIATELY WITH !important
       document.documentElement.setAttribute('style', 'background-color: transparent !important;');
-      document.body.setAttribute('style', 'background-color: transparent !importa
+      document.body.setAttribute('style', 'background-color: transparent !important;');
       
       // KEEP VIDEO VISIBLE - DO NOT HIDE IT
       mainVideo.style.display = 'block';
-      mainVideo.style.zIndex = '5'; // Below canvas
+      mainVideo.style.zIndex = '1'; // Below everything - as background
       
       // Force video to render by playing and pausing again
       setTimeout(function() {
         mainVideo.play();
         setTimeout(function() {
           mainVideo.pause();
-          console.log('Video re-paused to force render');
+          console.log('Video re-paused at 9.0s to force render');
         }, 200); // Increase delay to 200ms
       }, 100);
       
@@ -429,3 +429,4 @@
 </script>
 </body>
 </html>
+
