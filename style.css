@@ -80,6 +80,8 @@
   
   .container {
     height: 100%;
+    height: 100vh;
+    height: -webkit-fill-available;
     display: -webkit-box;
     display: flex;
     -webkit-box-pack: center;
@@ -89,7 +91,7 @@
     background: transparent !important;
     position: relative;
     z-index: 10;
-    pointer-events: none;
+    pointer-events: auto;
   }
   
   .loading-init {
@@ -128,12 +130,15 @@
   }
 
   .stage-container.show {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
   }
+  
   .canvas-container {
     pointer-events: auto;
+    width: 100%;
+    height: 100%;
   }
   @media (max-width: 840px) {
     .stage-container {
@@ -181,14 +186,39 @@
     transition: filter 0.3s;
     transition: filter 0.3s, -webkit-filter 0.3s;
     background: transparent !important;
+    position: relative;
   }
   .canvas-container canvas {
     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     mix-blend-mode: lighten;
     -webkit-transform: translateZ(0);
             transform: translateZ(0);
     z-index: 20;
     touch-action: none;
+    pointer-events: auto;
+  }
+  
+  /* Ensure canvas works in all orientations */
+  @media (orientation: portrait) {
+    .canvas-container,
+    .canvas-container canvas {
+      width: 100vw;
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
+  }
+  
+  @media (orientation: landscape) {
+    .canvas-container,
+    .canvas-container canvas {
+      width: 100vw;
+      height: 100vh;
+      height: -webkit-fill-available;
+    }
   }
   
   .controls {
