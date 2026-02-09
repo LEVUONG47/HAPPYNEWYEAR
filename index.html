@@ -146,19 +146,13 @@
 </div>
 
 <!-- Video Screen - Background -->
-<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted crossorigin="anonymous">
-  <source src="https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/real.mp4" type="video/mp4">
+<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted>
+  <source src="./real.mp4" type="video/mp4">
   Trình duyệt của bạn không hỗ trợ video.
 </video>
 
-<!-- Fallback: Static background image -->
-<div id="staticBg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; display: none; background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center; background-size: cover;"></div>
-
-<!-- Background Image (captured from video) -->
-<img id="bgImage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;" alt="Background" />
-
-<!-- Hidden canvas for capturing video frame -->
-<canvas id="captureCanvas" style="display: none;"></canvas>
+<!-- Static Background Image -->
+<img id="bgImageStatic" src="./background.jpg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 8; display: none;" alt="Background" />
 
 <!-- Wishes Container -->
 <div id="wishesContainer"></div>
@@ -281,41 +275,52 @@
     }
   });
   
-  // Listen for video time update to pause at 9.08s
+  // Listen for video time update to pause at 8.5s
   mainVideo.addEventListener('timeupdate', function() {
-    if (mainVideo.currentTime >= 9.08 && !mainVideo.paused) {
+    if (mainVideo.currentTime >= 8.5 && !mainVideo.paused) {
       mainVideo.pause();
+      
+      // Seek to exact frame to ensure it renders
+      mainVideo.currentTime = 8.5;
+      
       window.videoCompleted = true;
       
-      console.log('Video paused at 9.08s - keeping as background');
-      console.log('Video display:', mainVideo.style.display);
-      console.log('Video z-index:', mainVideo.style.zIndex);
+      console.log('Video paused at 8.5s - KEEPING VIDEO AS BACKGROUND');
       
-      // IMPORTANT: Ensure video stays visible
+      // FORCE ALL BACKGROUNDS TO TRANSPARENT IMMEDIATELY WITH !important
+      document.documentElement.setAttribute('style', 'background-color: transparent !important;');
+      document.body.setAttribute('style', 'background-color: transparent !importa
+      
+      // KEEP VIDEO VISIBLE - DO NOT HIDE IT
       mainVideo.style.display = 'block';
-      mainVideo.style.zIndex = '5';
+      mainVideo.style.zIndex = '5'; // Below canvas
       
-      // Keep video visible as background (no need to capture due to CORS)
-      // Just start fireworks on top
+      // Force video to render by playing and pausing again
       setTimeout(function() {
-        console.log('Starting fireworks...');
-        console.log('Video still visible?', mainVideo.style.display);
+        mainVideo.play();
+        setTimeout(function() {
+          mainVideo.pause();
+          console.log('Video re-paused to force render');
+        }, 200); // Increase delay to 200ms
+      }, 100);
+      
+      // Start fireworks on top of video
+      setTimeout(function() {
+        console.log('Starting fireworks on top of video...');
         startFireworks();
       }, 500);
     }
   });
   
-  // Fallback: If video doesn't work after 3 seconds, show static background
-  setTimeout(function() {
-    if (!window.videoCompleted && mainVideo.style.display === 'none') {
-      console.log('Video not working, showing static background');
-      document.getElementById('staticBg').style.display = 'block';
-      startFireworks();
-    }
-  }, 3000);
-  
   // Function to start fireworks
   function startFireworks() {
+    console.log('=== START FIREWORKS FUNCTION ===');
+    
+    // ENSURE VIDEO STAYS VISIBLE
+    mainVideo.style.display = 'block';
+    mainVideo.style.zIndex = '1';
+    console.log('Video forced to stay visible');
+    
     // Start wishes when fireworks start
     setTimeout(scheduleWish, 1500);
     
@@ -323,28 +328,52 @@
       if (typeof togglePause !== 'undefined' && typeof store !== 'undefined') {
         clearInterval(checkInit);
         
-        // Make sure the stage container is visible
+        console.log('Video still visible?', mainVideo.style.display);
+        
+        // Make sure the stage container is visible ABOVE VIDEO
         var stageContainer = document.querySelector('.stage-container');
         if (stageContainer) {
           stageContainer.classList.remove('remove');
           stageContainer.classList.add('show');
           stageContainer.style.visibility = 'visible';
           stageContainer.style.opacity = '1';
+          stageContainer.style.backgroundColor = 'transparent';
+          stageContainer.style.background = 'transparent';
+          stageContainer.style.zIndex = '10'; // Above video
+          console.log('Stage container shown ABOVE video');
+        }
+        
+        // FORCE canvas-container to stay transparent
+        var canvasContainer = document.querySelector('.canvas-container');
+        if (canvasContainer) {
+          canvasContainer.style.backgroundColor = 'transparent';
+          canvasContainer.style.background = 'transparent';
         }
         
         // Remove loading screen if still present
         var loadingInit = document.querySelector('.loading-init');
         if (loadingInit) {
           loadingInit.remove();
+          console.log('Loading screen removed');
         }
         
         // Unpause the fireworks
         togglePause(false);
+        console.log('Fireworks unpaused');
         
         // Enable sound for fireworks
         if (typeof toggleSound !== 'undefined') {
           toggleSound(true);
+          console.log('Sound enabled');
         }
+        
+        // Monitor video visibility every 100ms
+        setInterval(function() {
+          if (mainVideo.style.display !== 'block') {
+            mainVideo.style.display = 'block';
+            console.log('[MONITOR] FORCED video back to block!');
+          }
+        }, 100);
         
         // Enable auto-launch
         if (store && store.state && store.state.config) {
