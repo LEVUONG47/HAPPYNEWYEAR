@@ -157,6 +157,26 @@
 <!-- Wishes Container -->
 <div id="wishesContainer"></div>
 
+<!-- Curved Title -->
+<div class="curved-text-container" style="opacity: 0; transition: opacity 1s ease-in;">
+  <svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" style="stop-color:#ffd700"><animate attributeName="stop-color" values="#ffd700;#ff6b6b;#ffd700" dur="3s" repeatCount="indefinite"/></stop>
+        <stop offset="50%" style="stop-color:#ff6b6b"><animate attributeName="stop-color" values="#ff6b6b;#ffd700;#ff6b6b" dur="3s" repeatCount="indefinite"/></stop>
+        <stop offset="100%" style="stop-color:#ffd700"><animate attributeName="stop-color" values="#ffd700;#ff6b6b;#ffd700" dur="3s" repeatCount="indefinite"/></stop>
+      </linearGradient>
+      <path id="textCurve" d="M 20,75 Q 200,5 380,75" fill="transparent"/>
+    </defs>
+    <text class="curved-text"><textPath href="#textCurve" startOffset="50%" text-anchor="middle">Chúc Mừng Năm Mới</textPath></text>
+  </svg>
+</div>
+
+<!-- Year -->
+<div class="year-display" style="opacity: 0; transition: opacity 1s ease-in;">
+  <div class="year-number">2026</div>
+</div>
+
 <!-- SVG Icons -->
 <div style="height:0;width:0;position:absolute;visibility:hidden;">
   <svg xmlns="http://www.w3.org/2000/svg">
@@ -320,6 +340,15 @@
             stageContainer.classList.add('show');
           }, 50);
         }
+        
+        // Show title and year text with fade in
+        setTimeout(function() {
+          var curvedText = document.querySelector('.curved-text-container');
+          var yearDisplay = document.querySelector('.year-display');
+          if (curvedText) curvedText.style.opacity = '1';
+          if (yearDisplay) yearDisplay.style.opacity = '1';
+          console.log('Title and year text shown');
+        }, 500);
         
         // Remove loading screen if still present
         var loadingInit = document.querySelector('.loading-init');
