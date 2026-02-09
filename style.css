@@ -12,14 +12,6 @@
     background-color: #000;
   }
   
-  html.show-background {
-    background-image: url('background.jpg') !important;
-    background-size: cover !important;
-    background-position: center center !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
-  }
-  
   body {
     overflow: hidden;
     color: rgba(255, 255, 255, 0.5);
@@ -89,7 +81,7 @@
     pointer-events: none;
     background: transparent;
   }
-  }
+
   .stage-container.show {
     visibility: visible;
     opacity: 1;
