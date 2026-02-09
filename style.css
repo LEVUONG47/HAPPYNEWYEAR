@@ -131,14 +131,35 @@
       margin: 0;
     }
     
-    /* Hide controls on mobile for cleaner look */
-    .controls {
-      opacity: 0.3;
-      transition: opacity 0.3s;
+    /* Optimize for portrait mode */
+    @media (orientation: portrait) {
+      .controls {
+        opacity: 0.2;
+        transition: opacity 0.3s;
+        padding-bottom: 20px;
+      }
+      
+      .controls:active,
+      .controls:focus {
+        opacity: 1;
+      }
+      
+      .btn {
+        width: 44px;
+        height: 44px;
+      }
     }
     
-    .controls:active {
-      opacity: 1;
+    /* Hide controls on mobile landscape for cleaner look */
+    @media (orientation: landscape) {
+      .controls {
+        opacity: 0.3;
+        transition: opacity 0.3s;
+      }
+      
+      .controls:active {
+        opacity: 1;
+      }
     }
   }
   
