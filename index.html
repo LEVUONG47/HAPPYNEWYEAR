@@ -146,10 +146,13 @@
 </div>
 
 <!-- Video Screen - Background -->
-<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted>
+<video id="mainVideo" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 5; display: none;" playsinline preload="auto" muted crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/real.mp4" type="video/mp4">
   Trình duyệt của bạn không hỗ trợ video.
 </video>
+
+<!-- Fallback: Static background image -->
+<div id="staticBg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 4; display: none; background: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png') no-repeat center center; background-size: cover;"></div>
 
 <!-- Background Image (captured from video) -->
 <img id="bgImage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none;" alt="Background" />
@@ -301,6 +304,15 @@
       }, 500);
     }
   });
+  
+  // Fallback: If video doesn't work after 3 seconds, show static background
+  setTimeout(function() {
+    if (!window.videoCompleted && mainVideo.style.display === 'none') {
+      console.log('Video not working, showing static background');
+      document.getElementById('staticBg').style.display = 'block';
+      startFireworks();
+    }
+  }, 3000);
   
   // Function to start fireworks
   function startFireworks() {
