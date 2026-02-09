@@ -279,102 +279,46 @@
   mainVideo.addEventListener('timeupdate', function() {
     if (mainVideo.currentTime >= 10.0 && !mainVideo.paused) {
       mainVideo.pause();
-      
-      // Seek to exact frame
       mainVideo.currentTime = 10.0;
       
       window.videoCompleted = true;
       
-      console.log('Video paused at 10.0s - Capturing frame as background');
+      console.log('Video ended at 10s - Transitioning to fireworks...');
       
-      // CAPTURE video frame as background
-      captureVideoFrame();
+      // Smooth fade out video
+      mainVideo.style.transition = 'opacity 1s ease-out';
+      mainVideo.style.opacity = '0';
       
-      // Smooth transition to fireworks after 800ms
+      // After fade out, hide video and start fireworks
       setTimeout(function() {
-        console.log('Starting smooth transition to fireworks...');
+        mainVideo.style.display = 'none';
+        console.log('Video hidden, starting fireworks...');
         startFireworks();
-      }, 800);
+      }, 1000);
     }
   });
-  
-  // Function to capture video frame as background
-  function captureVideoFrame() {
-    try {
-      // Create canvas to capture video frame
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext('2d');
-      
-      // Set canvas size to video dimensions
-      canvas.width = mainVideo.videoWidth || 1920;
-      canvas.height = mainVideo.videoHeight || 1080;
-      
-      // Draw current video frame
-      ctx.drawImage(mainVideo, 0, 0, canvas.width, canvas.height);
-      
-      // Convert to data URL (JPEG 95% quality)
-      var frameDataUrl = canvas.toDataURL('image/jpeg', 0.95);
-      
-      console.log('Video frame captured successfully');
-      
-      // Apply as background with smooth fade
-      document.documentElement.style.backgroundImage = 'url(' + frameDataUrl + ')';
-      document.documentElement.style.backgroundSize = 'cover';
-      document.documentElement.style.backgroundPosition = 'center center';
-      document.documentElement.style.backgroundRepeat = 'no-repeat';
-      document.documentElement.style.backgroundAttachment = 'fixed';
-      
-      // Fade out video, fade in background
-      mainVideo.style.transition = 'opacity 0.8s ease-out';
-      mainVideo.style.opacity = '0';
-      
-      // Remove video after fade out
-      setTimeout(function() {
-        mainVideo.style.display = 'none';
-        console.log('Video hidden, background visible');
-      }, 800);
-      
-    } catch(e) {
-      console.error('Error capturing video frame:', e);
-      // Fallback: just hide video
-      mainVideo.style.opacity = '0';
-      setTimeout(function() {
-        mainVideo.style.display = 'none';
-      }, 800);
-    }
-  }
   
   // Function to start fireworks
   function startFireworks() {
     console.log('=== START FIREWORKS FUNCTION ===');
     
-    // Start wishes when fireworks start
-    setTimeout(scheduleWish, 1500);
-    
     var checkInit = setInterval(function() {
       if (typeof togglePause !== 'undefined' && typeof store !== 'undefined') {
         clearInterval(checkInit);
         
-        console.log('Video still visible?', mainVideo.style.display);
-        
-        // Make sure the stage container is visible ABOVE VIDEO
+        // Make sure the stage container is visible
         var stageContainer = document.querySelector('.stage-container');
         if (stageContainer) {
           stageContainer.classList.remove('remove');
-          stageContainer.classList.add('show');
           stageContainer.style.visibility = 'visible';
-          stageContainer.style.opacity = '1';
-          stageContainer.style.backgroundColor = 'transparent';
-          stageContainer.style.background = 'transparent';
-          stageContainer.style.zIndex = '10'; // Above video
-          console.log('Stage container shown ABOVE video');
-        }
-        
-        // FORCE canvas-container to stay transparent
-        var canvasContainer = document.querySelector('.canvas-container');
-        if (canvasContainer) {
-          canvasContainer.style.backgroundColor = 'transparent';
-          canvasContainer.style.background = 'transparent';
+          stageContainer.style.opacity = '0';
+          
+          // Smooth fade in
+          setTimeout(function() {
+            stageContainer.style.transition = 'opacity 1s ease-in';
+            stageContainer.style.opacity = '1';
+            stageContainer.classList.add('show');
+          }, 50);
         }
         
         // Remove loading screen if still present
@@ -398,6 +342,9 @@
         if (store && store.state && store.state.config) {
           store.state.config.autoLaunch = true;
         }
+        
+        // Start wishes after fireworks start
+        setTimeout(scheduleWish, 1500);
       }
     }, 100);
   }
