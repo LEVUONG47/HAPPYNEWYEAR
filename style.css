@@ -10,6 +10,11 @@
   
   html {
     background-color: #000;
+    background-image: url('https://raw.githubusercontent.com/LEVUONG47/HAPPYNEWYEAR/main/image.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
   
   body {
@@ -18,7 +23,7 @@
     font-family: "Russo One", arial, sans-serif;
     line-height: 1.25;
     letter-spacing: 0.06em;
-    background-color: #000;
+    background-color: transparent;
   }
   
   .hide {
