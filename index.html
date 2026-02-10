@@ -367,10 +367,12 @@
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/fscreen%401.0.1.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/Stage%400.1.4.js"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/329180/MyMath.js"></script>
-<script src="./script.js"></script>
+<script src="./script.js" onload="console.log('script.js loaded successfully')" onerror="console.error('ERROR: script.js failed to load!')"></script>
 
 <script>
 (function() {
+  console.log('=== MAIN SCRIPT STARTED ===');
+  
   // Prevent fireworks from starting automatically
   window.videoCompleted = false;
   
@@ -503,6 +505,7 @@
   // Listen for video time update to pause at 10s
   mainVideo.addEventListener('timeupdate', function() {
     if (mainVideo.currentTime >= 10.0 && !mainVideo.paused) {
+      console.log('=== VIDEO REACHED 10s ===');
       mainVideo.pause();
       mainVideo.currentTime = 10.0;
       
@@ -512,15 +515,19 @@
       document.body.classList.remove('video-playing');
       
       console.log('Video ended at 10s - Transitioning to fireworks...');
+      console.log('Video element:', mainVideo);
+      console.log('Video display:', mainVideo.style.display);
       
       // Smooth fade out video
       mainVideo.style.transition = 'opacity 1s ease-out';
       mainVideo.style.opacity = '0';
+      console.log('Video fading out...');
       
       // After fade out, hide video and start fireworks
       setTimeout(function() {
         mainVideo.style.display = 'none';
-        console.log('Video hidden, starting fireworks...');
+        console.log('Video hidden');
+        console.log('Calling startFireworks()...');
         startFireworks();
       }, 1000);
     }
@@ -529,33 +536,52 @@
   // Function to start fireworks
   function startFireworks() {
     console.log('=== START FIREWORKS FUNCTION ===');
+    console.log('Checking for script.js dependencies...');
+    
+    // Add timeout fallback in case script.js is slow
+    var maxWaitTime = 5000; // 5 seconds max wait
+    var startTime = Date.now();
     
     var checkInit = setInterval(function() {
+      var elapsed = Date.now() - startTime;
+      
+      // Check if dependencies are ready
       if (typeof togglePause !== 'undefined' && typeof store !== 'undefined') {
         clearInterval(checkInit);
+        console.log('Dependencies ready! Starting fireworks...');
         
         // Make sure the stage container is visible
         var stageContainer = document.querySelector('.stage-container');
         if (stageContainer) {
+          console.log('Stage container found');
           stageContainer.classList.remove('remove');
           stageContainer.style.visibility = 'visible';
           stageContainer.style.opacity = '0';
+          stageContainer.style.display = 'block';
           
           // Smooth fade in
           setTimeout(function() {
             stageContainer.style.transition = 'opacity 1s ease-in';
             stageContainer.style.opacity = '1';
             stageContainer.classList.add('show');
+            console.log('Stage container visible');
           }, 50);
+        } else {
+          console.error('Stage container not found!');
         }
         
         // Show title and year text with fade in
         setTimeout(function() {
           var curvedText = document.querySelector('.curved-text-container');
           var yearDisplay = document.querySelector('.year-display');
-          if (curvedText) curvedText.style.opacity = '1';
-          if (yearDisplay) yearDisplay.style.opacity = '1';
-          console.log('Title and year text shown');
+          if (curvedText) {
+            curvedText.style.opacity = '1';
+            console.log('Title shown');
+          }
+          if (yearDisplay) {
+            yearDisplay.style.opacity = '1';
+            console.log('Year shown');
+          }
         }, 500);
         
         // Remove loading screen if still present
@@ -566,22 +592,46 @@
         }
         
         // Unpause the fireworks
-        togglePause(false);
-        console.log('Fireworks unpaused');
+        try {
+          togglePause(false);
+          console.log('Fireworks unpaused');
+        } catch(e) {
+          console.error('Error unpausing:', e);
+        }
         
         // Enable sound for fireworks
         if (typeof toggleSound !== 'undefined') {
-          toggleSound(true);
-          console.log('Sound enabled');
+          try {
+            toggleSound(true);
+            console.log('Sound enabled');
+          } catch(e) {
+            console.error('Error enabling sound:', e);
+          }
         }
         
         // Enable auto-launch
         if (store && store.state && store.state.config) {
           store.state.config.autoLaunch = true;
+          console.log('Auto-launch enabled');
         }
         
         // Start wishes after fireworks start
         setTimeout(scheduleWish, 1500);
+        
+      } else if (elapsed > maxWaitTime) {
+        // Timeout - script.js might not have loaded
+        clearInterval(checkInit);
+        console.error('TIMEOUT: script.js dependencies not ready after 5s');
+        console.error('togglePause:', typeof togglePause);
+        console.error('store:', typeof store);
+        
+        // Show error message to user
+        alert('Lỗi: Không thể tải pháo hoa. Vui lòng refresh trang (F5).');
+      } else {
+        // Still waiting
+        if (elapsed % 1000 < 100) { // Log every second
+          console.log('Waiting for dependencies... (' + Math.floor(elapsed/1000) + 's)');
+        }
       }
     }, 100);
   }
