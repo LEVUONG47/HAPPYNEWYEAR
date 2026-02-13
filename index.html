@@ -277,9 +277,6 @@
   Trình duyệt của bạn không hỗ trợ video.
 </video>
 
-<!-- Static Background Image -->
-<img id="bgImageStatic" src="./background.jpg" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 8; display: none;" alt="Background" />
-
 <!-- Wishes Container -->
 <div id="wishesContainer"></div>
 
@@ -502,34 +499,36 @@
     }
   });
   
-  // Listen for video time update to pause at 10s
+  // Track if transition has started
+  var transitionStarted = false;
+  
+  // Listen for video time update
   mainVideo.addEventListener('timeupdate', function() {
-    if (mainVideo.currentTime >= 10.0 && !mainVideo.paused) {
-      console.log('=== VIDEO REACHED 10s ===');
-      mainVideo.pause();
-      mainVideo.currentTime = 10.0;
+    // Start transition at 9 seconds - ZOOM OUT (phóng nhỏ)
+    if (mainVideo.currentTime >= 9.0 && !transitionStarted) {
+      transitionStarted = true;
+      console.log('=== VIDEO REACHED 9s - Zooming OUT ===');
       
-      window.videoCompleted = true;
+      // PAUSE VIDEO IMMEDIATELY
+      mainVideo.pause();
+      mainVideo.currentTime = 9.0;
       
       // Remove video-playing class
       document.body.classList.remove('video-playing');
       
-      console.log('Video ended at 10s - Transitioning to fireworks...');
-      console.log('Video element:', mainVideo);
-      console.log('Video display:', mainVideo.style.display);
+      // ZOOM OUT - phóng nhỏ video
+      mainVideo.style.transition = 'transform 4s ease-in-out, opacity 4s ease-in-out';
+      mainVideo.style.transform = 'scale(0.05)'; // Thu nhỏ xuống 5%
+      mainVideo.style.opacity = '0'; // Biến mất luôn
+      console.log('Video zooming out...');
       
-      // Smooth fade out video
-      mainVideo.style.transition = 'opacity 1s ease-out';
-      mainVideo.style.opacity = '0';
-      console.log('Video fading out...');
-      
-      // After fade out, hide video and start fireworks
+      // After 4s, hide video and start fireworks
       setTimeout(function() {
         mainVideo.style.display = 'none';
-        console.log('Video hidden');
-        console.log('Calling startFireworks()...');
+        window.videoCompleted = true;
+        console.log('Starting fireworks!');
         startFireworks();
-      }, 1000);
+      }, 4000);
     }
   });
   
@@ -548,7 +547,7 @@
       // Check if dependencies are ready
       if (typeof togglePause !== 'undefined' && typeof store !== 'undefined') {
         clearInterval(checkInit);
-        console.log('Dependencies ready! Starting fireworks...');
+        console.log('Dependencies ready! Starting fireworks AND sound together...');
         
         // Make sure the stage container is visible
         var stageContainer = document.querySelector('.stage-container');
@@ -556,33 +555,27 @@
           console.log('Stage container found');
           stageContainer.classList.remove('remove');
           stageContainer.style.visibility = 'visible';
-          stageContainer.style.opacity = '0';
+          stageContainer.style.opacity = '1'; // Show immediately
           stageContainer.style.display = 'block';
-          
-          // Smooth fade in
-          setTimeout(function() {
-            stageContainer.style.transition = 'opacity 1s ease-in';
-            stageContainer.style.opacity = '1';
-            stageContainer.classList.add('show');
-            console.log('Stage container visible');
-          }, 50);
+          stageContainer.classList.add('show');
+          console.log('Stage container visible');
         } else {
           console.error('Stage container not found!');
         }
         
-        // Show title and year text with fade in
-        setTimeout(function() {
-          var curvedText = document.querySelector('.curved-text-container');
-          var yearDisplay = document.querySelector('.year-display');
-          if (curvedText) {
-            curvedText.style.opacity = '1';
-            console.log('Title shown');
-          }
-          if (yearDisplay) {
-            yearDisplay.style.opacity = '1';
-            console.log('Year shown');
-          }
-        }, 500);
+        // Show title and year text immediately
+        var curvedText = document.querySelector('.curved-text-container');
+        var yearDisplay = document.querySelector('.year-display');
+        if (curvedText) {
+          curvedText.style.transition = 'opacity 0.8s ease-in';
+          curvedText.style.opacity = '1';
+          console.log('Title shown');
+        }
+        if (yearDisplay) {
+          yearDisplay.style.transition = 'opacity 0.8s ease-in';
+          yearDisplay.style.opacity = '1';
+          console.log('Year shown');
+        }
         
         // Remove loading screen if still present
         var loadingInit = document.querySelector('.loading-init');
@@ -591,32 +584,32 @@
           console.log('Loading screen removed');
         }
         
-        // Unpause the fireworks
+        // IMMEDIATELY unpause fireworks and enable sound - NO DELAY
         try {
           togglePause(false);
-          console.log('Fireworks unpaused');
+          console.log('✓ Fireworks unpaused IMMEDIATELY');
         } catch(e) {
           console.error('Error unpausing:', e);
         }
         
-        // Enable sound for fireworks
+        // Enable sound IMMEDIATELY
         if (typeof toggleSound !== 'undefined') {
           try {
             toggleSound(true);
-            console.log('Sound enabled');
+            console.log('✓ Sound enabled IMMEDIATELY');
           } catch(e) {
             console.error('Error enabling sound:', e);
           }
         }
         
-        // Enable auto-launch
+        // Enable auto-launch IMMEDIATELY
         if (store && store.state && store.state.config) {
           store.state.config.autoLaunch = true;
-          console.log('Auto-launch enabled');
+          console.log('✓ Auto-launch enabled IMMEDIATELY');
         }
         
-        // Start wishes after fireworks start
-        setTimeout(scheduleWish, 1500);
+        // Start wishes immediately
+        setTimeout(scheduleWish, 500);
         
       } else if (elapsed > maxWaitTime) {
         // Timeout - script.js might not have loaded
